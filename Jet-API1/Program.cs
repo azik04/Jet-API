@@ -24,6 +24,8 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 builder.Services.AddAuthentication();
 builder.Services.AddScoped<IPlaceService, PlaceService>();
 builder.Services.AddScoped<ICityService, CityService>();
+builder.Services.AddScoped<IRegionService, RegionService>();
+builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();

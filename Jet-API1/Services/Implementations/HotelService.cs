@@ -3,31 +3,33 @@ using Jet_API1.Model;
 using Jet_API1.Response;
 using Jet_API1.Services.Interfaces;
 using Jet_API1.ViewModel.Cityes;
+using Jet_API1.ViewModel.Hotel;
 
 namespace Jet_API1.Services.Implementations
 {
-    public class CityService : ICityService
+    public class HotelService : IHotelService
     {
         private readonly ApplicationDbContext _db;
-        public CityService(ApplicationDbContext db)
+        public HotelService(ApplicationDbContext db)
         {
             _db = db;
         }
 
-        public async Task<BaseResponse<City>> Create(CreateCityVM city)
+        public async Task<BaseResponse<Hotel>> Create(CreateHotelVM hotel)
         {
             try
             {
-                City data = new City()
+                Hotel data = new Hotel()
                 {
                     CreateAt = DateTime.Now,
-                    Name = city.Name,
+                    Name = hotel.Name,
+                    RegionId = hotel.RegionId,
                 };
 
-                await _db.City.AddAsync(data);
+                await _db.Hotels.AddAsync(data);
                 await _db.SaveChangesAsync();
 
-                return new BaseResponse<City>()
+                return new BaseResponse<Hotel>()
                 {
                     Data = data,
                     Description = "City has been successfully created",
@@ -36,7 +38,7 @@ namespace Jet_API1.Services.Implementations
             }
             catch (Exception ex)
             {
-                return new BaseResponse<City>()
+                return new BaseResponse<Hotel>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
@@ -44,15 +46,14 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public async Task<BaseResponse<City>> Delete(int id)
+        public async Task<BaseResponse<Hotel>> Delete(int id)
         {
             try
             {
-                var data = _db.City.FirstOrDefault(x => x.Id == id);
-                
+                var data = _db.Hotels.FirstOrDefault(x => x.Id == id);
                 data.IsDeleted = true;
                 await _db.SaveChangesAsync();
-                return new BaseResponse<City>()
+                return new BaseResponse<Hotel>()
                 {
                     Data = data,
                     Description = "City has been succesfully Removed",
@@ -61,27 +62,22 @@ namespace Jet_API1.Services.Implementations
             }
             catch (Exception ex)
             {
-                return new BaseResponse<City>()
+                return new BaseResponse<Hotel>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
                 };
             }
-            
+
         }
 
-        public async Task<BaseResponse<City>> Get(int id)
+        public async Task<BaseResponse<Hotel>> Get(int id)
         {
             try
             {
-                var city = _db.City.FirstOrDefault(x => x.Id == id);
-                city.Places = _db.Places.Where(x => x.CityId == id).ToList();
-                foreach (var place in city.Places)
-                {
-                    var updatedPlace = _db.Places.Where(x => x.CityId == id);
-                    await _db.SaveChangesAsync();
-                }
-                return new BaseResponse<City>()
+                var city = _db.Hotels.FirstOrDefault(x => x.Id == id);
+               
+                return new BaseResponse<Hotel>()
                 {
                     Data = city,
                     Description = "City has been succesfully Found",
@@ -90,7 +86,7 @@ namespace Jet_API1.Services.Implementations
             }
             catch (Exception ex)
             {
-                return new BaseResponse<City>()
+                return new BaseResponse<Hotel>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
@@ -98,18 +94,13 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public BaseResponse<IQueryable<City>> GetAll()
+        public BaseResponse<IQueryable<Hotel>> GetAll()
         {
             try
             {
-                var data = _db.City.Where(x => !x.IsDeleted);
-                foreach(var city in data)
-                {
-                   _db.Places.Where(x => x.CityId == city.Id).ToList();
-                   _db.Regions.Where(x => x.CityId == city.Id).ToList();
-                }
-                
-                return new BaseResponse<IQueryable<City>>()
+                var data = _db.Hotels.Where(x => !x.IsDeleted);
+               
+                return new BaseResponse<IQueryable<Hotel>>()
                 {
                     Data = data,
                     Description = "Cities have been successfully retrieved",
@@ -118,7 +109,7 @@ namespace Jet_API1.Services.Implementations
             }
             catch (Exception ex)
             {
-                return new BaseResponse<IQueryable<City>>()
+                return new BaseResponse<IQueryable<Hotel>>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
@@ -126,25 +117,25 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public async Task<BaseResponse<City>> Update(City city)
+        public async Task<BaseResponse<Hotel>> Update(Hotel hotel, int id)
         {
             try
             {
-                var data = _db.City.FirstOrDefault(x => x.Id == city.Id);
-                data.Name = city.Name;
+                var data = _db.Hotels.FirstOrDefault(x => x.Id == id);
+                data.Name = hotel.Name;
                 data.UpdateAt = DateTime.Now;
-                _db.City.Update(data);
+                _db.Hotels.Update(data);
                 await _db.SaveChangesAsync();
-                return new BaseResponse<City>()
+                return new BaseResponse<Hotel>()
                 {
                     Data = data,
-                    Description = $"City:{city.Name} has been succesfully Update",
+                    Description = $"City:{hotel.Name} has been succesfully Update",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
-                return new BaseResponse<City>()
+                return new BaseResponse<Hotel>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error

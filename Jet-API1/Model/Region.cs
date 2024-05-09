@@ -1,4 +1,5 @@
 ﻿using Jet_API1.Model.Base;
+using System.Text.Json.Serialization;
 
 namespace Jet_API1.Model
 {
@@ -6,7 +7,8 @@ namespace Jet_API1.Model
     {
         public string Name { get; set; }
         public int CityId { get; set; }
+        [JsonIgnore]
         public City City { get; set; } 
-        public IQueryable<Hotel> Hotel { get; set; }
+        public ICollection<Hotel> Hotel { get; set; }
     }
 }
