@@ -2,7 +2,7 @@
 using Jet_API1.Model;
 using Jet_API1.Response;
 using Jet_API1.Services.Interfaces;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Jet_API1.ViewModel.Cityes;
 
 namespace Jet_API1.Services.Implementations
 {
@@ -13,7 +13,8 @@ namespace Jet_API1.Services.Implementations
         {
             _db = db;
         }
-        public async Task<BaseResponse<City>> Create(City city)
+
+        public async Task<BaseResponse<City>> Create(CreateCityVM city)
         {
             try
             {
@@ -48,6 +49,7 @@ namespace Jet_API1.Services.Implementations
             try
             {
                 var data = _db.City.FirstOrDefault(x => x.Id == id);
+                
                 data.IsDeleted = true;
                 await _db.SaveChangesAsync();
                 return new BaseResponse<City>()
@@ -72,11 +74,16 @@ namespace Jet_API1.Services.Implementations
         {
             try
             {
-                var place = _db.Places.Where(x => x.CityId == id);
-                var data = _db.City.FirstOrDefault(x => x.Id == id);
+                var city = _db.City.FirstOrDefault(x => x.Id == id);
+                city.Places = _db.Places.Where(x => x.CityId == id).ToList();
+                foreach (var place in city.Places)
+                {
+                    var updatedPlace = _db.Places.Where(x => x.CityId == id);
+                    await _db.SaveChangesAsync();
+                }
                 return new BaseResponse<City>()
                 {
-                    Data = data,
+                    Data = city,
                     Description = "City has been succesfully Found",
                     StatusCode = Enum.StatusCode.Ok
                 };
@@ -96,6 +103,10 @@ namespace Jet_API1.Services.Implementations
             try
             {
                 var data = _db.City.Where(x => !x.IsDeleted);
+                foreach(var city in data)
+                {
+                   _db.Places.Where(x => x.CityId == city.Id).ToList();
+                }
                 return new BaseResponse<IQueryable<City>>()
                 {
                     Data = data,

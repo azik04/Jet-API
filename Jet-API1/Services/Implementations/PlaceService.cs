@@ -2,6 +2,8 @@
 using Jet_API1.Model;
 using Jet_API1.Response;
 using Jet_API1.Services.Interfaces;
+using Jet_API1.ViewModel.Places;
+using Microsoft.EntityFrameworkCore;
 
 namespace Jet_API1.Services.Implementations;
 
@@ -12,13 +14,15 @@ public class PlaceService : IPlaceService
     {
         _db = db;
     }
-    public async Task<BaseResponse<Place>> Create(Place city)
+    public async Task<BaseResponse<Place>> Create(CreatePalaceVM city)
     {
         try
         {
             Place data = new Place()
             {
                 CreateAt = DateTime.Now,
+                Description = city.Description,
+                CityId = city.CityId,
                 Name = city.Name,
             };
 

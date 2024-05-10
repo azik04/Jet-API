@@ -1,6 +1,6 @@
 ﻿using Jet_API1.Model;
 using Jet_API1.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
+using Jet_API1.ViewModel.Cityes; 
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jet_API1.Controllers;
@@ -28,7 +28,7 @@ public class CityController : ControllerBase
         }
     }
     [HttpPost]
-    public async Task<IActionResult> Create(City city)
+    public async Task<IActionResult> Create(CreateCityVM city)
     {
         var data = await _service.Create(city);
         if (data.StatusCode == Enum.StatusCode.Ok)
@@ -40,7 +40,7 @@ public class CityController : ControllerBase
             return BadRequest();
         }
     }
-    [HttpGet]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var data = await _service.Get(id);
@@ -66,6 +66,7 @@ public class CityController : ControllerBase
             return BadRequest();
         }
     }
+    [HttpDelete("{id}")]
     public async Task<IActionResult> Remove(int id)
     {
         var data = await _service.Delete(id);

@@ -1,5 +1,6 @@
 ﻿using Jet_API1.Model;
 using Jet_API1.Services.Interfaces;
+using Jet_API1.ViewModel.Places;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,68 +15,72 @@ public class PlaceController : ControllerBase
     {
         _service = service;
     }
+
     [HttpGet]
     public IActionResult GetAll()
     {
-        var data = _service.GetAll();
-        if (data.StatusCode == Enum.StatusCode.Ok)
+        var response = _service.GetAll();
+        if (response.StatusCode == Enum.StatusCode.Ok)
         {
-            return Ok(data);
+            return Ok(response);
         }
         else
         {
-            return BadRequest();
+            return BadRequest(response);
         }
     }
-    [HttpPost]
-    public async Task<IActionResult> Create(Place city)
-    {
-        var data = await _service.Create(city);
-        if (data.StatusCode == Enum.StatusCode.Ok)
-        {
-            return Ok(data);
-        }
-        else
-        {
-            return BadRequest();
-        }
-    }
-    [HttpGet]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var data = await _service.Get(id);
-        if (data.StatusCode == Enum.StatusCode.Ok)
+        var response = await _service.Get(id);
+        if (response.StatusCode == Enum.StatusCode.Ok)
         {
-            return Ok(data);
+            return Ok(response);
         }
         else
         {
-            return BadRequest();
+            return BadRequest(response);
         }
     }
     [HttpPut]
-    public async Task<IActionResult> Updata(Place city)
+    public async Task<IActionResult> Update(Place place)
     {
-        var data = await _service.Update(city);
-        if (data.StatusCode == Enum.StatusCode.Ok)
+        var response = await _service.Update(place);
+        if (response.StatusCode == Enum.StatusCode.Ok)
         {
-            return Ok(data);
+            return Ok(response);
         }
         else
         {
-            return BadRequest();
+            return BadRequest(response);
         }
     }
-    public async Task<IActionResult> Remove(int id)
+
+    [HttpPost]
+    public async Task<IActionResult> Create(CreatePalaceVM place)
     {
-        var data = await _service.Delete(id);
-        if (data.StatusCode == Enum.StatusCode.Ok)
+        var response = await _service.Create(place);
+        if (response.StatusCode == Enum.StatusCode.Ok)
         {
-            return Ok(data);
+            return CreatedAtAction(nameof(GetAll), response);
         }
         else
         {
-            return BadRequest();
+            return BadRequest(response);
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Remove(int id)
+    {
+        var response = await _service.Delete(id);
+        if (response.StatusCode == Enum.StatusCode.Ok)
+        {
+            return Ok(response);
+        }
+        else
+        {
+            return BadRequest(response);
         }
     }
 }
