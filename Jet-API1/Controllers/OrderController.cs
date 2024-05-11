@@ -3,6 +3,7 @@ using Jet_API1.Services.Interfaces;
 using Jet_API1.ViewModel.Orders;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Jet_API1.Controllers
 {
@@ -21,6 +22,7 @@ namespace Jet_API1.Controllers
                 var data = _service.GetAll();
                 if (data.StatusCode == Enum.StatusCode.Ok)
                 {
+                    Log.Information("Tour Agency = {@data}", data);
                     return Ok(data);
                 }
                 else
@@ -34,6 +36,7 @@ namespace Jet_API1.Controllers
                 var data = await _service.Get(id);
                 if (data.StatusCode == Enum.StatusCode.Ok)
                 {
+                    Log.Information("Tour Agency = {@data}", data);
                     return Ok(data);
                 }
                 else
@@ -47,6 +50,7 @@ namespace Jet_API1.Controllers
                 var data = await _service.Create(order);
                 if (data.StatusCode == Enum.StatusCode.Ok)
                 {
+                    Log.Information("Tour Agency = {@data}", data);
                     return Ok(data);
                 }
                 else
@@ -60,7 +64,8 @@ namespace Jet_API1.Controllers
                 var data = await _service.Delete(id);
                 if (data.StatusCode == Enum.StatusCode.Ok)
                 {
-                    return Ok(data);
+                Log.Information("Tour Agency = {@data}", data);
+                return Ok(data);
                 }
                 else
                 {
@@ -73,7 +78,8 @@ namespace Jet_API1.Controllers
                 var data = await _service.Update(order);
                 if (data.StatusCode == Enum.StatusCode.Ok)
                 {
-                    return Ok(data);
+                Log.Information("Tour Agency = {@data}", data);
+                return Ok(data);
                 }
                 else
                 {

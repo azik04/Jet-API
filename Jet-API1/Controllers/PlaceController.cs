@@ -3,6 +3,8 @@ using Jet_API1.Services.Interfaces;
 using Jet_API1.ViewModel.Places;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Jet_API1.Controllers;
 
@@ -35,6 +37,7 @@ public class PlaceController : ControllerBase
         var response = await _service.Get(id);
         if (response.StatusCode == Enum.StatusCode.Ok)
         {
+            Log.Information("Tour Agency = {@response}", response);
             return Ok(response);
         }
         else
@@ -48,6 +51,7 @@ public class PlaceController : ControllerBase
         var response = await _service.Update(place);
         if (response.StatusCode == Enum.StatusCode.Ok)
         {
+            Log.Information("Tour Agency = {@response}", response);
             return Ok(response);
         }
         else
@@ -62,6 +66,7 @@ public class PlaceController : ControllerBase
         var response = await _service.Create(place);
         if (response.StatusCode == Enum.StatusCode.Ok)
         {
+            Log.Information("Tour Agency = {@response}", response);
             return CreatedAtAction(nameof(GetAll), response);
         }
         else
@@ -76,6 +81,7 @@ public class PlaceController : ControllerBase
         var response = await _service.Delete(id);
         if (response.StatusCode == Enum.StatusCode.Ok)
         {
+            Log.Information("Tour Agency = {@response}", response);
             return Ok(response);
         }
         else

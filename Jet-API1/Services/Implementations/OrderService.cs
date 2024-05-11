@@ -81,6 +81,7 @@ namespace Jet_API1.Services.Implementations
                 var city = _db.Orders.FirstOrDefault(x => x.Id == id);
                 city.Hotels = _db.Hotels.FirstOrDefault(x => x.Id == city.HotelId);
                 city.Regions = _db.Regions.FirstOrDefault(x => x.Id == city.RegionId);
+                city.Flight = _db.Flights.FirstOrDefault(x => x.Id == city.FlightId);
                 return new BaseResponse<Order>()
                 {
                     Data = city,
@@ -107,6 +108,7 @@ namespace Jet_API1.Services.Implementations
                 {
                     item.Hotels = _db.Hotels.FirstOrDefault(x => x.Id == item.HotelId);
                     item.Regions = _db.Regions.FirstOrDefault(x => x.Id == item.RegionId);
+                    item.Flight = _db.Flights.FirstOrDefault(x => x.Id == item.FlightId);
                 }
                 return new BaseResponse<IQueryable<Order>>()
                 {

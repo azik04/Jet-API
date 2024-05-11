@@ -3,6 +3,7 @@ using Jet_API1.Services.Implementations;
 using Jet_API1.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 var con = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
-    option.UseInMemoryDatabase("Test");
+    option.UseSqlServer(con);
 });
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
@@ -29,7 +30,11 @@ builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<IFlightService, FlightService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddSwaggerGen();
-
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .CreateLogger();
+builder.Host.UseSerilog();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -41,6 +46,8 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name");
     });
 }
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 

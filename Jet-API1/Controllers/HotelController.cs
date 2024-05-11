@@ -4,6 +4,7 @@ using Jet_API1.ViewModel.Cityes;
 using Jet_API1.ViewModel.Hotel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Jet_API1.Controllers
 {
@@ -35,6 +36,7 @@ namespace Jet_API1.Controllers
             var data = await _service.Create(hotel);
             if (data.StatusCode == Enum.StatusCode.Ok)
             {
+                Log.Information("Tour Agency = {@data}", data);
                 return Ok(data);
             }
             else
@@ -48,6 +50,7 @@ namespace Jet_API1.Controllers
             var data = await _service.Get(id);
             if (data.StatusCode == Enum.StatusCode.Ok)
             {
+                Log.Information("Tour Agency = {@data}", data);
                 return Ok(data);
             }
             else
@@ -61,6 +64,7 @@ namespace Jet_API1.Controllers
             var data = await _service.Update(hotel , id);
             if (data.StatusCode == Enum.StatusCode.Ok)
             {
+                Log.Information("Tour Agency = {@data}", data);
                 return Ok(data);
             }
             else
@@ -74,6 +78,7 @@ namespace Jet_API1.Controllers
             var data = await _service.Delete(id);
             if (data.StatusCode == Enum.StatusCode.Ok)
             {
+                Log.Information("Tour Agency = {@data}", data);
                 return Ok(data);
             }
             else

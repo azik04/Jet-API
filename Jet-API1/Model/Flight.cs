@@ -9,5 +9,7 @@ namespace Jet_API1.Model
         public string Description { get; set; }
         public int VehicleId { get; set; }
         public Vehicle Vehicle { get ; set; }
+        [JsonIgnore]
+        public ICollection<Order> Orders { get; set; }
     }
 }
