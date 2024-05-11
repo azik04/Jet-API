@@ -9,5 +9,7 @@ namespace Jet_API1.Model
         public int RegionId { get; set; }
         [JsonIgnore]
         public Region Region { get; set; }
+        [JsonIgnore]
+        public ICollection<Order> Order { get; set; }
     }
 }

@@ -46,6 +46,21 @@ namespace Jet_API1.Context
                     .HasForeignKey(x => x.CityId)
                     .OnDelete(DeleteBehavior.NoAction);
             });
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.HasKey(x => x.Id);
+                entity.HasOne(x => x.Hotels).WithMany(x => x.Order).HasForeignKey(x => x.HotelId).OnDelete(DeleteBehavior.NoAction);
+                entity.HasOne(x => x.Regions).WithMany(x => x.Order).HasForeignKey(x => x.RegionId).OnDelete(DeleteBehavior.NoAction);
+            });
+            modelBuilder.Entity<Vehicle>(entity =>
+            {
+                entity.HasKey(x => x.Id);
+            });
+            modelBuilder.Entity<Flight>(entity =>
+            {
+                entity.HasKey(x => x.Id);
+                entity.HasOne(x => x.Vehicle).WithMany(x => x.Flights).HasForeignKey(x => x.VehicleId).OnDelete(DeleteBehavior.NoAction);
+            });
         }
 
         public DbSet<City> City { get; set; }
@@ -53,5 +68,7 @@ namespace Jet_API1.Context
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Region> Regions { get; set; }
+        public DbSet<Vehicle> Vehicles { get; set; }
+        public  DbSet<Flight> Flights { get; set; }
     }
 }

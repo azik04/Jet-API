@@ -2,41 +2,42 @@
 using Jet_API1.Model;
 using Jet_API1.Response;
 using Jet_API1.Services.Interfaces;
-using Jet_API1.ViewModel.Cityes;
+using Jet_API1.ViewModel.Region;
+using Jet_API1.ViewModel.Vehicles;
 
 namespace Jet_API1.Services.Implementations
 {
-    public class CityService : ICityService
+    public class VehicleService : IVehicleService
     {
         private readonly ApplicationDbContext _db;
-        public CityService(ApplicationDbContext db)
+        public VehicleService(ApplicationDbContext db)
         {
             _db = db;
         }
 
-        public async Task<BaseResponse<City>> Create(CreateCityVM city)
+        public async Task<BaseResponse<Vehicle>> Create(CreateVehicleVM vehicle)
         {
             try
             {
-                City data = new City()
+                Vehicle data = new Vehicle()
                 {
                     CreateAt = DateTime.Now,
-                    Name = city.Name,
+                    Name = vehicle.Name,
                 };
 
-                await _db.City.AddAsync(data);
+                await _db.Vehicles.AddAsync(data);
                 await _db.SaveChangesAsync();
 
-                return new BaseResponse<City>()
+                return new BaseResponse<Vehicle>()
                 {
                     Data = data,
-                    Description = "City has been successfully created",
+                    Description = "Vehicle has been successfully created",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<City>()
+                return new BaseResponse<Vehicle>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
@@ -44,49 +45,47 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public async Task<BaseResponse<City>> Delete(int id)
+        public async Task<BaseResponse<Vehicle>> Delete(int id)
         {
             try
             {
-                var data = _db.City.FirstOrDefault(x => x.Id == id);
-                
+                var data = _db.Vehicles.FirstOrDefault(x => x.Id == id);
+
                 data.IsDeleted = true;
                 await _db.SaveChangesAsync();
-                return new BaseResponse<City>()
+                return new BaseResponse<Vehicle>()
                 {
                     Data = data,
-                    Description = "City has been succesfully Removed",
+                    Description = "Vehicle has been succesfully Removed",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<City>()
+                return new BaseResponse<Vehicle>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
                 };
             }
-            
+
         }
 
-        public async Task<BaseResponse<City>> Get(int id)
+        public async Task<BaseResponse<Vehicle>> Get(int id)
         {
             try
             {
-                var city = _db.City.FirstOrDefault(x => x.Id == id);
-                city.Places = _db.Places.Where(x => x.CityId == id).ToList();
-                city.Regions = _db.Regions.Where(x => x.CityId == id).ToList();
-                return new BaseResponse<City>()
+                var vehicle = _db.Vehicles.FirstOrDefault(x => x.Id == id);
+                return new BaseResponse<Vehicle>()
                 {
-                    Data = city,
-                    Description = "City has been succesfully Found",
+                    Data = vehicle,
+                    Description = "Vehicle has been succesfully Found",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<City>()
+                return new BaseResponse<Vehicle>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
@@ -94,27 +93,21 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public BaseResponse<IQueryable<City>> GetAll()
+        public BaseResponse<IQueryable<Vehicle>> GetAll()
         {
             try
             {
-                var data = _db.City.Where(x => !x.IsDeleted);
-                foreach(var city in data)
-                {
-                   _db.Places.Where(x => x.CityId == city.Id).ToList();
-                   _db.Regions.Where(x => x.CityId == city.Id).ToList();
-                }
-                
-                return new BaseResponse<IQueryable<City>>()
+                var data = _db.Vehicles.Where(x => !x.IsDeleted);
+                return new BaseResponse<IQueryable<Vehicle>>()
                 {
                     Data = data,
-                    Description = "Cities have been successfully retrieved",
+                    Description = "Vehicle have been successfully retrieved",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<IQueryable<City>>()
+                return new BaseResponse<IQueryable<Vehicle>>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
@@ -122,25 +115,25 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public async Task<BaseResponse<City>> Update(City city)
+        public async Task<BaseResponse<Vehicle>> Update(Vehicle vehicle, int id)
         {
             try
             {
-                var data = _db.City.FirstOrDefault(x => x.Id == city.Id);
-                data.Name = city.Name;
+                var data = _db.Vehicles.FirstOrDefault(x => x.Id == vehicle.Id);
+                data.Name = vehicle.Name;
                 data.UpdateAt = DateTime.Now;
-                _db.City.Update(data);
+                _db.Vehicles.Update(data);
                 await _db.SaveChangesAsync();
-                return new BaseResponse<City>()
+                return new BaseResponse<Vehicle>()
                 {
                     Data = data,
-                    Description = $"City:{city.Name} has been succesfully Update",
+                    Description = $"Vehicle:{vehicle.Name} has been succesfully Update",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
-                return new BaseResponse<City>()
+                return new BaseResponse<Vehicle>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error

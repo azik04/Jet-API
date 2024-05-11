@@ -2,41 +2,45 @@
 using Jet_API1.Model;
 using Jet_API1.Response;
 using Jet_API1.Services.Interfaces;
-using Jet_API1.ViewModel.Cityes;
+using Jet_API1.ViewModel.Orders;
 
 namespace Jet_API1.Services.Implementations
 {
-    public class CityService : ICityService
+    public class OrderService : IOrderService
     {
         private readonly ApplicationDbContext _db;
-        public CityService(ApplicationDbContext db)
+        public OrderService(ApplicationDbContext db)
         {
             _db = db;
         }
 
-        public async Task<BaseResponse<City>> Create(CreateCityVM city)
+        public async Task<BaseResponse<Order>> Create(CreateOrderVM city)
         {
             try
             {
-                City data = new City()
+                Order data = new Order()
                 {
                     CreateAt = DateTime.Now,
-                    Name = city.Name,
+                    CheckIn = city.CheckIn,
+                    CheckOut = city.CheckOut,
+                    HotelId = city.HotelId,
+                    RegionId = city.RegionId,
+                    UserName = city.UserName,
                 };
 
-                await _db.City.AddAsync(data);
+                await _db.Orders.AddAsync(data);
                 await _db.SaveChangesAsync();
 
-                return new BaseResponse<City>()
+                return new BaseResponse<Order>()
                 {
                     Data = data,
-                    Description = "City has been successfully created",
+                    Description = "Order has been successfully created",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<City>()
+                return new BaseResponse<Order>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
@@ -44,49 +48,49 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public async Task<BaseResponse<City>> Delete(int id)
+        public async Task<BaseResponse<Order>> Delete(int id)
         {
             try
             {
-                var data = _db.City.FirstOrDefault(x => x.Id == id);
-                
+                var data = _db.Orders.FirstOrDefault(x => x.Id == id);
+
                 data.IsDeleted = true;
                 await _db.SaveChangesAsync();
-                return new BaseResponse<City>()
+                return new BaseResponse<Order>()
                 {
                     Data = data,
-                    Description = "City has been succesfully Removed",
+                    Description = "Order has been succesfully Removed",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<City>()
+                return new BaseResponse<Order>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
                 };
             }
-            
+
         }
 
-        public async Task<BaseResponse<City>> Get(int id)
+        public async Task<BaseResponse<Order>> Get(int id)
         {
             try
             {
-                var city = _db.City.FirstOrDefault(x => x.Id == id);
-                city.Places = _db.Places.Where(x => x.CityId == id).ToList();
-                city.Regions = _db.Regions.Where(x => x.CityId == id).ToList();
-                return new BaseResponse<City>()
+                var city = _db.Orders.FirstOrDefault(x => x.Id == id);
+                city.Hotels = _db.Hotels.FirstOrDefault(x => x.Id == city.HotelId);
+                city.Regions = _db.Regions.FirstOrDefault(x => x.Id == city.RegionId);
+                return new BaseResponse<Order>()
                 {
                     Data = city,
-                    Description = "City has been succesfully Found",
+                    Description = "Order has been succesfully Found",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<City>()
+                return new BaseResponse<Order>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
@@ -94,27 +98,26 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public BaseResponse<IQueryable<City>> GetAll()
+        public BaseResponse<IQueryable<Order>> GetAll()
         {
             try
             {
-                var data = _db.City.Where(x => !x.IsDeleted);
-                foreach(var city in data)
+                var data = _db.Orders.Where(x => !x.IsDeleted);
+                foreach (var item in data)
                 {
-                   _db.Places.Where(x => x.CityId == city.Id).ToList();
-                   _db.Regions.Where(x => x.CityId == city.Id).ToList();
+                    item.Hotels = _db.Hotels.FirstOrDefault(x => x.Id == item.HotelId);
+                    item.Regions = _db.Regions.FirstOrDefault(x => x.Id == item.RegionId);
                 }
-                
-                return new BaseResponse<IQueryable<City>>()
+                return new BaseResponse<IQueryable<Order>>()
                 {
                     Data = data,
-                    Description = "Cities have been successfully retrieved",
+                    Description = "Order have been successfully retrieved",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<IQueryable<City>>()
+                return new BaseResponse<IQueryable<Order>>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
@@ -122,25 +125,26 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public async Task<BaseResponse<City>> Update(City city)
+        public async Task<BaseResponse<Order>> Update(Order order)
         {
             try
             {
-                var data = _db.City.FirstOrDefault(x => x.Id == city.Id);
-                data.Name = city.Name;
+                var data = _db.Orders.FirstOrDefault(x => x.Id == order.Id);
+                data.CheckIn = order.CheckIn;
+                data.CheckOut = order.CheckOut;
                 data.UpdateAt = DateTime.Now;
-                _db.City.Update(data);
+                _db.Orders.Update(data);
                 await _db.SaveChangesAsync();
-                return new BaseResponse<City>()
+                return new BaseResponse<Order>()
                 {
                     Data = data,
-                    Description = $"City:{city.Name} has been succesfully Update",
+                    Description = $"Order has been succesfully Update",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
-                return new BaseResponse<City>()
+                return new BaseResponse<Order>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error

@@ -77,6 +77,7 @@ public class RegionService : IRegionService
         try
         {
             var city = _db.Regions.FirstOrDefault(x => x.Id == id);
+            city.Hotel = _db.Hotels.Where(x => x.RegionId == id).ToList();
             return new BaseResponse<Region>()
             {
                 Data = city,

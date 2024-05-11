@@ -26,6 +26,8 @@ builder.Services.AddScoped<IPlaceService, PlaceService>();
 builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<IRegionService, RegionService>();
 builder.Services.AddScoped<IHotelService, HotelService>();
+builder.Services.AddScoped<IFlightService, FlightService>();
+builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
