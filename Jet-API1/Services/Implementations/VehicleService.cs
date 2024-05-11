@@ -2,6 +2,7 @@
 using Jet_API1.Model;
 using Jet_API1.Response;
 using Jet_API1.Services.Interfaces;
+using Jet_API1.ViewModel.Places;
 using Jet_API1.ViewModel.Region;
 using Jet_API1.ViewModel.Vehicles;
 
@@ -115,11 +116,11 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public async Task<BaseResponse<Vehicle>> Update(Vehicle vehicle, int id)
+        public async Task<BaseResponse<Vehicle>> Update(int id, CreateVehicleVM vehicle)
         {
             try
             {
-                var data = _db.Vehicles.FirstOrDefault(x => x.Id == vehicle.Id);
+                var data = _db.Vehicles.FirstOrDefault(x => x.Id == id);
                 data.Name = vehicle.Name;
                 data.UpdateAt = DateTime.Now;
                 _db.Vehicles.Update(data);

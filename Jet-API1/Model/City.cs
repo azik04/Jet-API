@@ -7,7 +7,7 @@ namespace Jet_API1.Model
     {
         public string Name { get; set; }
         
-        public List<Place> Places { get; set; }
-        public List<Region> Regions { get; set; }
+        public List<Place>? Places { get; set; }
+        public List<Region>? Regions { get; set; }
     }
 }

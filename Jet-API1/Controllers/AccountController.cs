@@ -21,6 +21,7 @@ public class AccountController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Register(AccountVM account)
     {
+
         IdentityUser user = new IdentityUser()
         {
             UserName = account.UserName,

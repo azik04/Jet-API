@@ -75,8 +75,8 @@ namespace Jet_API1.Services.Implementations
             try
             {
                 var city = _db.City.FirstOrDefault(x => x.Id == id);
-                city.Places = _db.Places.Where(x => x.CityId == id).ToList();
-                city.Regions = _db.Regions.Where(x => x.CityId == id).ToList();
+                city.Places = _db.Places?.Where(x => x.CityId == id).ToList();
+                city.Regions = _db.Regions?.Where(x => x.CityId == id).ToList();
                 return new BaseResponse<City>()
                 {
                     Data = city,
@@ -101,8 +101,8 @@ namespace Jet_API1.Services.Implementations
                 var data = _db.City.Where(x => !x.IsDeleted);
                 foreach(var city in data)
                 {
-                   _db.Places.Where(x => x.CityId == city.Id).ToList();
-                   _db.Regions.Where(x => x.CityId == city.Id).ToList();
+                   _db.Places?.Where(x => x.CityId == city.Id).ToList();
+                   _db.Regions?.Where(x => x.CityId == city.Id).ToList();
                 }
                 
                 return new BaseResponse<IQueryable<City>>()
@@ -122,11 +122,11 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public async Task<BaseResponse<City>> Update(City city)
+        public async Task<BaseResponse<City>> Update(int id, CreateCityVM city)
         {
             try
             {
-                var data = _db.City.FirstOrDefault(x => x.Id == city.Id);
+                var data = _db.City.FirstOrDefault(x => x.Id == id);
                 data.Name = city.Name;
                 data.UpdateAt = DateTime.Now;
                 _db.City.Update(data);

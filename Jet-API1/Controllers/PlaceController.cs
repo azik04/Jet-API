@@ -46,9 +46,9 @@ public class PlaceController : ControllerBase
         }
     }
     [HttpPut]
-    public async Task<IActionResult> Update(Place place)
+    public async Task<IActionResult> Update(int id, CreatePalaceVM place)
     {
-        var response = await _service.Update(place);
+        var response = await _service.Update(id, place);
         if (response.StatusCode == Enum.StatusCode.Ok)
         {
             Log.Information("Tour Agency = {@response}", response);

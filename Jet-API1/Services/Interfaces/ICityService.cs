@@ -9,7 +9,7 @@ namespace Jet_API1.Services.Interfaces
         Task<BaseResponse<City>> Create (CreateCityVM city);
         BaseResponse<IQueryable<City>> GetAll ();
         Task<BaseResponse<City>> Get (int id);
-        Task<BaseResponse<City>> Update (City city);
+        Task<BaseResponse<City>> Update (int id , CreateCityVM city);
         Task<BaseResponse<City>> Delete (int id);
     }
 }

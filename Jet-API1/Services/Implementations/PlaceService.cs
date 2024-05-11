@@ -2,6 +2,7 @@
 using Jet_API1.Model;
 using Jet_API1.Response;
 using Jet_API1.Services.Interfaces;
+using Jet_API1.ViewModel.Orders;
 using Jet_API1.ViewModel.Places;
 using Microsoft.EntityFrameworkCore;
 
@@ -115,20 +116,20 @@ public class PlaceService : IPlaceService
         }
     }
 
-    public async Task<BaseResponse<Place>> Update(Place city)
+    public async Task<BaseResponse<Place>> Update(int id, CreatePalaceVM place)
     {
         try
         {
-            var data = _db.Places.FirstOrDefault(x => x.Id == city.Id);
-            data.Name = city.Name;
-            data.Description = city.Description;
+            var data = _db.Places.FirstOrDefault(x => x.Id == id);
+            data.Name = place.Name;
+            data.Description = place.Description;
             data.UpdateAt = DateTime.Now;
             _db.Places.Update(data);
             await _db.SaveChangesAsync();
             return new BaseResponse<Place>()
             {
                 Data = data,
-                Description = $"City:{city.Name} has been succesfully Update",
+                Description = $"City:{data.Name} has been succesfully Update",
                 StatusCode = Enum.StatusCode.Ok
             };
         }

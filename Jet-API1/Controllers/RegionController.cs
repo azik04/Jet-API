@@ -62,9 +62,9 @@ namespace Jet_API1.Controllers
             }
         }
         [HttpPut]
-        public async Task<IActionResult> Updata(Region region, int id)
+        public async Task<IActionResult> Updata(int id, CreateRegionVM region)
         {
-            var data = await _service.Update(region, id);
+            var data = await _service.Update(id, region);
             if (data.StatusCode == Enum.StatusCode.Ok)
             {
                 Log.Information("Tour Agency = {@data}", data);

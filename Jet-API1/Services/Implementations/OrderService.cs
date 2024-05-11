@@ -2,6 +2,7 @@
 using Jet_API1.Model;
 using Jet_API1.Response;
 using Jet_API1.Services.Interfaces;
+using Jet_API1.ViewModel.Flights;
 using Jet_API1.ViewModel.Orders;
 
 namespace Jet_API1.Services.Implementations
@@ -127,11 +128,11 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public async Task<BaseResponse<Order>> Update(Order order)
+        public async Task<BaseResponse<Order>> Update(int id, CreateOrderVM order)
         {
             try
             {
-                var data = _db.Orders.FirstOrDefault(x => x.Id == order.Id);
+                var data = _db.Orders.FirstOrDefault(x => x.Id == id);
                 data.CheckIn = order.CheckIn;
                 data.CheckOut = order.CheckOut;
                 data.UpdateAt = DateTime.Now;

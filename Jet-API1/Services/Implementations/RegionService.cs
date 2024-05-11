@@ -3,6 +3,7 @@ using Jet_API1.Model;
 using Jet_API1.Response;
 using Jet_API1.Services.Interfaces;
 using Jet_API1.ViewModel.Cityes;
+using Jet_API1.ViewModel.Places;
 using Jet_API1.ViewModel.Region;
 
 namespace Jet_API1.Services.Implementations;
@@ -121,11 +122,11 @@ public class RegionService : IRegionService
         }
     }
 
-    public async Task<BaseResponse<Region>> Update(Region region, int id)
+    public async Task<BaseResponse<Region>> Update(int id, CreateRegionVM region)
     {
         try
         {
-            var data = _db.Regions.FirstOrDefault(x => x.Id == region.Id);
+            var data = _db.Regions.FirstOrDefault(x => x.Id == id);
             data.Name = region.Name;
             data.CityId = region.CityId;
             data.UpdateAt = DateTime.Now;

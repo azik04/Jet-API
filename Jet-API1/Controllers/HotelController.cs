@@ -59,9 +59,9 @@ namespace Jet_API1.Controllers
             }
         }
         [HttpPut]
-        public async Task<IActionResult> Updata(Hotel hotel, int id)
+        public async Task<IActionResult> Updata(int id, CreateHotelVM hotel)
         {
-            var data = await _service.Update(hotel , id);
+            var data = await _service.Update(id, hotel);
             if (data.StatusCode == Enum.StatusCode.Ok)
             {
                 Log.Information("Tour Agency = {@data}", data);

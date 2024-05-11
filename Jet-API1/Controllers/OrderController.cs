@@ -73,9 +73,9 @@ namespace Jet_API1.Controllers
                 }
             }
             [HttpPut]
-            public async Task<IActionResult> Update(Order order)
+            public async Task<IActionResult> Update(int id , CreateOrderVM order)
             {
-                var data = await _service.Update(order);
+                var data = await _service.Update(id , order);
                 if (data.StatusCode == Enum.StatusCode.Ok)
                 {
                 Log.Information("Tour Agency = {@data}", data);

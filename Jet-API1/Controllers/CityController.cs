@@ -58,9 +58,9 @@ public class CityController : ControllerBase
         }
     }
     [HttpPut]
-    public async Task<IActionResult> Updata(City city)
+    public async Task<IActionResult> Updata(int id,CreateCityVM city)
     {
-        var data = await _service.Update(city);
+        var data = await _service.Update(id, city);
         if (data.StatusCode == Enum.StatusCode.Ok)
         {
             Log.Information("Tour Agency = {@data}", data);

@@ -2,6 +2,7 @@
 using Jet_API1.Model;
 using Jet_API1.Response;
 using Jet_API1.Services.Interfaces;
+using Jet_API1.ViewModel.Cityes;
 using Jet_API1.ViewModel.Flights;
 using Jet_API1.ViewModel.Region;
 using Jet_API1.ViewModel.Vehicles;
@@ -122,11 +123,11 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public async Task<BaseResponse<Flight>> Update(Flight flight, int id)
+        public async Task<BaseResponse<Flight>> Update(int id, CreateFlightVM flight)
         {
             try
             {
-                var data = _db.Flights.FirstOrDefault(x => x.Id == flight.Id);
+                var data = _db.Flights.FirstOrDefault(x => x.Id == id);
                 data.Name = flight.Name;
                 data.Description = flight.Description;
                 data.VehicleId = flight.VehicleId;

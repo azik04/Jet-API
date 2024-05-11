@@ -60,9 +60,9 @@ public class VehicleController : ControllerBase
         }
     }
     [HttpPut]
-    public async Task<IActionResult> Updata(Vehicle vehicle, int id)
+    public async Task<IActionResult> Updata(int id, CreateVehicleVM vehicle)
     {
-        var data = await _service.Update(vehicle, id);
+        var data = await _service.Update(id, vehicle);
         if (data.StatusCode == Enum.StatusCode.Ok)
         {
             Log.Information("Tour Agency = {@data}", data);

@@ -61,9 +61,9 @@ public class FlightController : ControllerBase
         }
     }
     [HttpPut]
-    public async Task<IActionResult> Updata(Flight flight, int id)
+    public async Task<IActionResult> Updata(int id, CreateFlightVM flight)
     {
-        var data = await _service.Update(flight, id);
+        var data = await _service.Update(id, flight);
         if (data.StatusCode == Enum.StatusCode.Ok)
         {
             Log.Information("Tour Agency = {@data}", data);

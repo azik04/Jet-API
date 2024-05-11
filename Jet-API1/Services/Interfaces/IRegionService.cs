@@ -11,7 +11,7 @@ namespace Jet_API1.Services.Interfaces
         Task<BaseResponse<Region>> Create(CreateRegionVM region);
         BaseResponse<IQueryable<Region>> GetAll();
         Task<BaseResponse<Region>> Get(int id);
-        Task<BaseResponse<Region>> Update(Region region, int id);
+        Task<BaseResponse<Region>> Update(int id, CreateRegionVM city);
         Task<BaseResponse<Region>> Delete(int id);
     }
 }
