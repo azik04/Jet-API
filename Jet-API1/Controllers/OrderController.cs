@@ -16,21 +16,21 @@ namespace Jet_API1.Controllers
             {
                 _service = service;
             }
-            [HttpGet]
-            public async Task<IActionResult> GetAll()
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var data = _service.GetAll();
+            if (data.StatusCode == Enum.StatusCode.Ok)
             {
-                var data = _service.GetAll();
-                if (data.StatusCode == Enum.StatusCode.Ok)
-                {
-                    Log.Information("Tour Agency = {@data}", data);
-                    return Ok(data);
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                Log.Information("Tour Agency = {@data}", data);
+                return Ok(data);
             }
-            [HttpGet("{id}")]
+            else
+            {
+                return BadRequest();
+            }
+        }
+        [HttpGet("{id}")]
             public async Task<IActionResult> Get(int id)
             {
                 var data = await _service.Get(id);
@@ -86,5 +86,20 @@ namespace Jet_API1.Controllers
                     return BadRequest();
                 }
             }
-        }
+        //[HttpGet]
+        //[Route("page")]
+        //public async Task<IActionResult> GetbyPage(int page)
+        //{
+        //    var data = _service.GetbyPage(page);
+        //    if (data.StatusCode == Enum.StatusCode.Ok)
+        //    {
+        //        Log.Information("Tour Agency = {@data}", data);
+        //        return Ok(data);
+        //    }
+        //    else
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
     }
+}

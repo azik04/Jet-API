@@ -30,7 +30,7 @@ namespace Jet_API1.Services.Implementations
                 };
 
                 await _db.Orders.AddAsync(data);
-                await _db.SaveChangesAsync();
+                 _db.SaveChangesAsync();
 
                 return new BaseResponse<Order>()
                 {
@@ -100,18 +100,18 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public BaseResponse<IQueryable<Order>> GetAll()
+        public BaseResponse<ICollection<Order>> GetAll()
         {
             try
             {
-                var data = _db.Orders.Where(x => !x.IsDeleted);
+                var data = _db.Orders.Where(x => !x.IsDeleted).ToList();
                 foreach (var item in data)
                 {
                     item.Hotels = _db.Hotels.FirstOrDefault(x => x.Id == item.HotelId);
                     item.Regions = _db.Regions.FirstOrDefault(x => x.Id == item.RegionId);
                     item.Flight = _db.Flights.FirstOrDefault(x => x.Id == item.FlightId);
                 }
-                return new BaseResponse<IQueryable<Order>>()
+                return new BaseResponse<ICollection<Order>>()
                 {
                     Data = data,
                     Description = "Order have been successfully retrieved",
@@ -120,7 +120,40 @@ namespace Jet_API1.Services.Implementations
             }
             catch (Exception ex)
             {
-                return new BaseResponse<IQueryable<Order>>()
+                return new BaseResponse<ICollection<Order>>()
+                {
+                    Description = ex.Message,
+                    StatusCode = Enum.StatusCode.Error
+                };
+            }
+        }
+
+        public BaseResponse<ICollection<Order>> GetbyPage(int page)
+        {
+            try {
+                int pageSize = 3;
+                int skip = page * pageSize;
+                var data = _db.Orders
+                               .Where(x => !x.IsDeleted)
+                               .Skip(skip)
+                               .Take(pageSize)
+                               .ToList();
+                foreach (var item in data)
+                {
+                    item.Hotels = _db.Hotels.FirstOrDefault(x => x.Id == item.HotelId);
+                    item.Regions = _db.Regions.FirstOrDefault(x => x.Id == item.RegionId);
+                    item.Flight = _db.Flights.FirstOrDefault(x => x.Id == item.FlightId);
+                }
+                return new BaseResponse<ICollection<Order>>()
+                {
+                    Data = data,
+                    Description = "Order have been successfully retrieved",
+                    StatusCode = Enum.StatusCode.Ok
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<ICollection<Order>>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error

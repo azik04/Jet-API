@@ -29,6 +29,7 @@ builder.Services.AddScoped<IRegionService, RegionService>();
 builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<IFlightService, FlightService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddSwaggerGen();
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
