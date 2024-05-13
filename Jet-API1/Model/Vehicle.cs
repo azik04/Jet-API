@@ -7,6 +7,6 @@ namespace Jet_API1.Model
     {
         public string Name { get; set; }
         [JsonIgnore]
-        public ICollection<Flight> Flights { get; set; }
+        public ICollection<Flight>? Flights { get; set; }
     }
 }

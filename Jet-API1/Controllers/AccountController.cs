@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Jet_API1.Controllers;
 
@@ -27,21 +28,102 @@ public class AccountController : ControllerBase
             UserName = account.UserName,
         };
         await _userManager.CreateAsync(user, account.Password);
-        return Ok(user);
+        var role = await _userManager.AddToRoleAsync(user, "User");
+        if (role.Succeeded)
+        {
+            return Ok(user);
+        }
+        else
+        {
+            return BadRequest();
+        }
     }
-    //[HttpPost]
-    //public async Task<IActionResult> LogIn(AccountVM account)
-    //{
-    //    var user = await _userManager.FindByNameAsync(account.UserName);
-    //    if (user == null)
-    //    {
-    //        return BadRequest("User hasn't been found");
-    //    }
-    //    Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(user, account.Password, isPersistent: false, lockoutOnFailure: false);
-    //    if (!result.Succeeded)
-    //    {
-    //        return BadRequest("Wrong Password or UserName");
-    //    }
-    //    return Ok();
-    //}
+    [HttpPut("Admin")]
+    public async Task<IActionResult> UpdateRole(string userName)
+    {
+        var user = _userManager.FindByNameAsync(userName);
+        if(user == null)
+        {
+            return BadRequest();
+        }
+        var rem = await _userManager.RemoveFromRoleAsync(await user, "User");
+        var role = await _userManager.AddToRoleAsync(await user, "Admin");
+        if (role.Succeeded)
+        {
+            return Ok(user);
+        }
+        else
+        {
+            return BadRequest();
+        }
+    }
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(AccountVM model)
+    {
+        var user = await _userManager.FindByNameAsync(model.UserName);
+        if (user == null)
+        {
+            return BadRequest("User not found");
+        }
+        var result = await _signInManager.PasswordSignInAsync(user, model.Password, isPersistent: false, lockoutOnFailure: false);
+        if (result.Succeeded)
+        {
+            return Ok(model);
+        }
+        else
+        {
+            return Unauthorized("Invalid username or password");
+        }
+    }
+    [HttpPost("Roles")]
+    public async Task<IActionResult> AddRole()
+    {
+        IdentityRole role = new IdentityRole
+        {
+            Name = "User"
+        };
+        IdentityRole role1 = new IdentityRole
+        {
+            Name = "Admin"
+        };
+        IdentityRole role2 = new IdentityRole
+        {
+            Name = "SuperAdmin"
+        };
+        await _roleManager.CreateAsync(role);
+        await _roleManager.CreateAsync(role1);
+        await _roleManager.CreateAsync(role2);
+        return Ok("Ok");
+    }
+    [HttpGet]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var data = await _userManager.Users.ToListAsync();
+        if (data != null)
+        {
+            return Ok(data);
+        }
+        else
+        {
+            return BadRequest("Users Not Found");
+        }
+    }
+    [HttpGet("GetRoles")]
+    public async Task<IActionResult> GetAllRoles(string userName)
+    {
+        var data = await _userManager.FindByNameAsync(userName);
+        if (data == null)
+        {
+            return NotFound($"User with ID {data} not found.");
+        }
+
+        var userRoles = await _userManager.GetRolesAsync(data);
+
+        return Ok(userRoles);
+    }
 }
+
+
+
+
+

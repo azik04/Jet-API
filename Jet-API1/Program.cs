@@ -16,12 +16,37 @@ builder.Services.AddEndpointsApiExplorer();
 var con = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
-    option.UseSqlServer(con);
+    option.UseInMemoryDatabase("Test");
 });
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Default Lockout settings.
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
+
+
+    // password settings
+    options.Password.RequiredUniqueChars = 1;
+    options.Password.RequireDigit= false;
+    options.Password.RequiredLength= 6;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase= true;
+    options.Password.RequireNonAlphanumeric= true;
+    
+    //user settings
+    options.User.RequireUniqueEmail = false;
+    options.User.AllowedUserNameCharacters =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+
+    // signin settings
+    options.SignIn.RequireConfirmedEmail = false;
+});
+
 builder.Services.AddAuthentication();
 builder.Services.AddScoped<IPlaceService, PlaceService>();
 builder.Services.AddScoped<ICityService, CityService>();
