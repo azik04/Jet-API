@@ -96,16 +96,16 @@ public class RegionService : IRegionService
         }
     }
 
-    public BaseResponse<IQueryable<Region>> GetAll()
+    public BaseResponse<ICollection<Region>> GetAll()
     {
         try
         {
-            var data = _db.Regions.Where(x => !x.IsDeleted);
+            var data = _db.Regions.Where(x => !x.IsDeleted).ToList();
             foreach (var item in data)
             {
                 item.Hotel = _db.Hotels.Where(x=>x.RegionId == item.Id).ToList();
             }
-            return new BaseResponse<IQueryable<Region>>()
+            return new BaseResponse<ICollection<Region>>()
             {
                 Data = data,
                 Description = "Cities have been successfully retrieved",
@@ -114,7 +114,7 @@ public class RegionService : IRegionService
         }
         catch (Exception ex)
         {
-            return new BaseResponse<IQueryable<Region>>()
+            return new BaseResponse<ICollection<Region>>()
             {
                 Description = ex.Message,
                 StatusCode = Enum.StatusCode.Error

@@ -8,7 +8,7 @@ namespace Jet_API1.Services.Interfaces
     public interface IVehicleService
     {
         Task<BaseResponse<Vehicle>> Create(CreateVehicleVM vehicle);
-        BaseResponse<IQueryable<Vehicle>> GetAll();
+        BaseResponse<ICollection<Vehicle>> GetAll();
         Task<BaseResponse<Vehicle>> Get(int id);
         Task<BaseResponse<Vehicle>> Update(int id, CreateVehicleVM city);
         Task<BaseResponse<Vehicle>> Delete(int id);

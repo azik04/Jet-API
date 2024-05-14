@@ -8,7 +8,7 @@ namespace Jet_API1.Services.Interfaces
     public interface IHotelService
     {
         Task<BaseResponse<Hotel>> Create(CreateHotelVM city);
-        BaseResponse<IQueryable<Hotel>> GetAll();
+        BaseResponse<ICollection<Hotel>> GetAll();
         Task<BaseResponse<Hotel>> Get(int id);
         Task<BaseResponse<Hotel>> Update(int id, CreateHotelVM city);
         Task<BaseResponse<Hotel>> Delete(int id);

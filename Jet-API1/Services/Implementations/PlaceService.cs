@@ -94,12 +94,12 @@ public class PlaceService : IPlaceService
         }
     }
 
-    public BaseResponse<IQueryable<Place>> GetAll()
+    public BaseResponse<ICollection<Place>> GetAll()
     {
         try
         {
-            var data = _db.Places.Where(x => !x.IsDeleted);
-            return new BaseResponse<IQueryable<Place>>()
+            var data = _db.Places.Where(x => !x.IsDeleted).ToList();
+            return new BaseResponse<ICollection<Place>>()
             {
                 Data = data,
                 Description = "Cities have been successfully retrieved",
@@ -108,7 +108,7 @@ public class PlaceService : IPlaceService
         }
         catch (Exception ex)
         {
-            return new BaseResponse<IQueryable<Place>>()
+            return new BaseResponse<ICollection<Place>>()
             {
                 Description = ex.Message,
                 StatusCode = Enum.StatusCode.Error

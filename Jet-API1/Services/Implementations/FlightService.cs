@@ -97,16 +97,16 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public BaseResponse<IQueryable<Flight>> GetAll()
+        public BaseResponse<ICollection<Flight>> GetAll()
         {
             try
             {
-                var data = _db.Flights.Where(x => !x.IsDeleted);
+                var data = _db.Flights.Where(x => !x.IsDeleted).ToList();
                 foreach (var item in data)
                 {
                     item.Vehicle = _db.Vehicles.SingleOrDefault(x => x.Id == item.VehicleId);
                 };
-                return new BaseResponse<IQueryable<Flight>>()
+                return new BaseResponse<ICollection<Flight>>()
                 {
                     Data = data,
                     Description = "Flight have been successfully retrieved",
@@ -115,7 +115,7 @@ namespace Jet_API1.Services.Implementations
             }
             catch (Exception ex)
             {
-                return new BaseResponse<IQueryable<Flight>>()
+                return new BaseResponse<ICollection<Flight>>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error

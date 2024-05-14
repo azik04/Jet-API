@@ -94,18 +94,18 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public BaseResponse<IQueryable<City>> GetAll()
+        public BaseResponse<ICollection<City>> GetAll()
         {
             try
             {
-                var data = _db.City.Where(x => !x.IsDeleted);
+                var data = _db.City.Where(x => !x.IsDeleted).ToList();
                 foreach(var city in data)
                 {
                    _db.Places?.Where(x => x.CityId == city.Id).ToList();
                    _db.Regions?.Where(x => x.CityId == city.Id).ToList();
                 }
                 
-                return new BaseResponse<IQueryable<City>>()
+                return new BaseResponse<ICollection<City>>()
                 {
                     Data = data,
                     Description = "Cities have been successfully retrieved",
@@ -114,7 +114,7 @@ namespace Jet_API1.Services.Implementations
             }
             catch (Exception ex)
             {
-                return new BaseResponse<IQueryable<City>>()
+                return new BaseResponse<ICollection<City>>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error

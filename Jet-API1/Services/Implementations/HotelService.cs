@@ -95,13 +95,13 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public BaseResponse<IQueryable<Hotel>> GetAll()
+        public BaseResponse<ICollection<Hotel>> GetAll()
         {
             try
             {
-                var data = _db.Hotels.Where(x => !x.IsDeleted);
+                var data = _db.Hotels.Where(x => !x.IsDeleted).ToList();
                
-                return new BaseResponse<IQueryable<Hotel>>()
+                return new BaseResponse<ICollection<Hotel>>()
                 {
                     Data = data,
                     Description = "Cities have been successfully retrieved",
@@ -110,7 +110,7 @@ namespace Jet_API1.Services.Implementations
             }
             catch (Exception ex)
             {
-                return new BaseResponse<IQueryable<Hotel>>()
+                return new BaseResponse<ICollection<Hotel>>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error

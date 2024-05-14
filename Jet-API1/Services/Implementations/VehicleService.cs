@@ -94,12 +94,12 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public BaseResponse<IQueryable<Vehicle>> GetAll()
+        public BaseResponse<ICollection<Vehicle>> GetAll()
         {
             try
             {
-                var data = _db.Vehicles.Where(x => !x.IsDeleted);
-                return new BaseResponse<IQueryable<Vehicle>>()
+                var data = _db.Vehicles.Where(x => !x.IsDeleted).ToList();
+                return new BaseResponse<ICollection<Vehicle>>()
                 {
                     Data = data,
                     Description = "Vehicle have been successfully retrieved",
@@ -108,7 +108,7 @@ namespace Jet_API1.Services.Implementations
             }
             catch (Exception ex)
             {
-                return new BaseResponse<IQueryable<Vehicle>>()
+                return new BaseResponse<ICollection<Vehicle>>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
