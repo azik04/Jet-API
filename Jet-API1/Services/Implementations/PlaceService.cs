@@ -2,6 +2,7 @@
 using Jet_API1.Model;
 using Jet_API1.Response;
 using Jet_API1.Services.Interfaces;
+using Jet_API1.ViewModel.Cityes;
 using Jet_API1.ViewModel.Orders;
 using Jet_API1.ViewModel.Places;
 using Microsoft.EntityFrameworkCore;
@@ -72,21 +73,29 @@ public class PlaceService : IPlaceService
 
     }
 
-    public async Task<BaseResponse<Place>> Get(int id)
+    public async Task<BaseResponse<GetPlaceVM>> Get(int id)
     {
         try
         {
             var data = _db.Places.FirstOrDefault(x => x.Id == id);
-            return new BaseResponse<Place>()
+            data.City = _db.City.FirstOrDefault(x => x.Id == data.CityId);
+            var vm = new GetPlaceVM
             {
-                Data = data,
+                Name = data.Name,
+                Description = data.Description,
+                CityId = data.CityId,
+                City = new CityVM { Name = data.City.Name },
+            };
+            return new BaseResponse<GetPlaceVM>()
+            {
+                Data = vm,
                 Description = "City has been succesfully Found",
                 StatusCode = Enum.StatusCode.Ok
             };
         }
         catch (Exception ex)
         {
-            return new BaseResponse<Place>()
+            return new BaseResponse<GetPlaceVM>()
             {
                 Description = ex.Message,
                 StatusCode = Enum.StatusCode.Error
@@ -94,21 +103,34 @@ public class PlaceService : IPlaceService
         }
     }
 
-    public BaseResponse<ICollection<Place>> GetAll()
+    public BaseResponse<ICollection<GetPlaceVM>> GetAll()
     {
         try
         {
             var data = _db.Places.Where(x => !x.IsDeleted).ToList();
-            return new BaseResponse<ICollection<Place>>()
+            var vms = new List<GetPlaceVM>();
+            foreach (var item  in data)
             {
-                Data = data,
+                item.City = _db.City.SingleOrDefault(x => x.Id == item.CityId);
+                var vm = new GetPlaceVM
+                {
+                    Name = item.Name,
+                    Description = item.Description,
+                    CityId = item.CityId,
+                    City = new CityVM { Name = item.City.Name },
+                };
+                vms.Add(vm);
+            }
+            return new BaseResponse<ICollection<GetPlaceVM>>()
+            {
+                Data = vms,
                 Description = "Cities have been successfully retrieved",
                 StatusCode = Enum.StatusCode.Ok
             };
         }
         catch (Exception ex)
         {
-            return new BaseResponse<ICollection<Place>>()
+            return new BaseResponse<ICollection<GetPlaceVM>>()
             {
                 Description = ex.Message,
                 StatusCode = Enum.StatusCode.Error

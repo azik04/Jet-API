@@ -8,8 +8,8 @@ namespace Jet_API1.Services.Interfaces
     public interface IPlaceService
     {
         Task<BaseResponse<Place>> Create(CreatePalaceVM city);
-        BaseResponse<ICollection<Place>> GetAll();
-        Task<BaseResponse<Place>> Get(int id);
+        BaseResponse<ICollection<GetPlaceVM>> GetAll();
+        Task<BaseResponse<GetPlaceVM>> Get(int id);
         Task<BaseResponse<Place>> Update(int id, CreatePalaceVM city);
         Task<BaseResponse<Place>> Delete(int id);
     }

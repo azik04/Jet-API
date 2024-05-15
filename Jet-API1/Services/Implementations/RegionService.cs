@@ -107,6 +107,14 @@ public class RegionService : IRegionService
         try
         {
             var data = _db.Regions.Where(x => !x.IsDeleted).ToList();
+            if (data == null)
+            {
+                return new BaseResponse<ICollection<GetRegionVM>>()
+                {
+                    Description = "Null Error",
+                    StatusCode = Enum.StatusCode.Error
+                };
+            }
             var vms = new List<GetRegionVM>();
             foreach (var item in data)
             {

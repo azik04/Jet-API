@@ -29,6 +29,9 @@ namespace Jet_API1.Services.Implementations
                     HotelId = city.HotelId,
                     RegionId = city.RegionId,
                     UserName = city.UserName,
+                    FlightId = city.FlightId,
+                    VehicleId = city.VehicleId,
+                    
                 };
 
                 await _db.Orders.AddAsync(data);
@@ -96,14 +99,15 @@ namespace Jet_API1.Services.Implementations
                     VehicleId = city.VehicleId,
                     Flight = new FlightVM
                     {
-                        Name = city.Flight.Name
+                        Name = city.Flight.Name,
                     },
                     Hotels = new HotelVM
                     {
-                        Name = 
-                    }
+                        Name = city.Hotels.Name
+                    },
                     Vehicle = new VehicleVM { Name = city.Vehicle.Name },
-                }
+                    Regions = new ViewModel.Regions.RegionVM { Name = city.Regions.Name }
+                };
                 return new BaseResponse<GetOrderVM>()
                 {
                     Data = vm,
@@ -121,27 +125,51 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public BaseResponse<ICollection<Order>> GetAll()
+        public BaseResponse<ICollection<GetOrderVM>> GetAll()
         {
             try
             {
                 var data = _db.Orders.Where(x => !x.IsDeleted).ToList();
+                var vms = new List<GetOrderVM>();
                 foreach (var item in data)
                 {
                     item.Hotels = _db.Hotels.FirstOrDefault(x => x.Id == item.HotelId);
                     item.Regions = _db.Regions.FirstOrDefault(x => x.Id == item.RegionId);
                     item.Flight = _db.Flights.FirstOrDefault(x => x.Id == item.FlightId);
-                }
-                return new BaseResponse<ICollection<Order>>()
+                    item.Vehicle = _db.Vehicles.FirstOrDefault(x => x.Id == item.VehicleId);
+                    var vm = new GetOrderVM
+                    {
+                        CheckIn = item.CheckIn,
+                        CheckOut = item.CheckOut,
+                        FlightId = item.FlightId,
+                        HotelId = item.HotelId,
+                        RegionId = item.RegionId,
+                        UserName = item.UserName,
+                        VehicleId = item.VehicleId,
+                        Flight = new FlightVM
+                        {
+                            Name = item.Flight.Name,
+                        },
+                        Hotels = new HotelVM
+                        {
+                            Name = item.Hotels.Name
+                        },
+                        Vehicle = new VehicleVM { Name = item.Vehicle.Name },
+                        Regions = new ViewModel.Regions.RegionVM { Name = item.Vehicle.Name}
+
+                    };
+                    vms.Add(vm);
+                } 
+                return new BaseResponse<ICollection<GetOrderVM>>()
                 {
-                    Data = data,
+                    Data = vms,
                     Description = "Order have been successfully retrieved",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<ICollection<Order>>()
+                return new BaseResponse<ICollection<GetOrderVM>>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error

@@ -6,6 +6,8 @@
         public string CheckOut { get; set; }
         public string UserName { get; set; }
         public int HotelId { get; set; }
+        public int FlightId { get; set; }
+        public int VehicleId { get; set; }
         public int RegionId { get; set; }
     }
 }
