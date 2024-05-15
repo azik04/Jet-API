@@ -8,7 +8,6 @@ namespace Jet_API1.Model
         public string Name { get; set; }
         public string Description { get; set; }
         public int CityId { get; set; }
-        [JsonIgnore]
         public City? City { get; set; }
     }
 }

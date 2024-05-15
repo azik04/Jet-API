@@ -3,7 +3,9 @@ using Jet_API1.Model;
 using Jet_API1.Response;
 using Jet_API1.Services.Interfaces;
 using Jet_API1.ViewModel.Flights;
+using Jet_API1.ViewModel.Hotel;
 using Jet_API1.ViewModel.Orders;
+using Jet_API1.ViewModel.Vehicles;
 
 namespace Jet_API1.Services.Implementations
 {
@@ -75,7 +77,7 @@ namespace Jet_API1.Services.Implementations
 
         }
 
-        public async Task<BaseResponse<Order>> Get(int id)
+        public async Task<BaseResponse<GetOrderVM>> Get(int id)
         {
             try
             {
@@ -83,16 +85,35 @@ namespace Jet_API1.Services.Implementations
                 city.Hotels = _db.Hotels.FirstOrDefault(x => x.Id == city.HotelId);
                 city.Regions = _db.Regions.FirstOrDefault(x => x.Id == city.RegionId);
                 city.Flight = _db.Flights.FirstOrDefault(x => x.Id == city.FlightId);
-                return new BaseResponse<Order>()
+                var vm = new GetOrderVM
                 {
-                    Data = city,
+                    CheckIn = city.CheckIn,
+                    CheckOut = city.CheckOut,
+                    FlightId = city.FlightId,
+                    HotelId = city.HotelId,
+                    RegionId = city.RegionId,
+                    UserName = city.UserName,
+                    VehicleId = city.VehicleId,
+                    Flight = new FlightVM
+                    {
+                        Name = city.Flight.Name
+                    },
+                    Hotels = new HotelVM
+                    {
+                        Name = 
+                    }
+                    Vehicle = new VehicleVM { Name = city.Vehicle.Name },
+                }
+                return new BaseResponse<GetOrderVM>()
+                {
+                    Data = vm,
                     Description = "Order has been succesfully Found",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<Order>()
+                return new BaseResponse<GetOrderVM>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error

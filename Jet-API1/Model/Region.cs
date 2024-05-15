@@ -7,10 +7,8 @@ namespace Jet_API1.Model
     {
         public string Name { get; set; }
         public int CityId { get; set; }
-        [JsonIgnore]
         public City City { get; set; }
-        public ICollection<Hotel> Hotel { get; set; }
-        [JsonIgnore]
+        public ICollection<Hotell> Hotel { get; set; }
         public ICollection<Order> Order { get; set; }
     }
 }

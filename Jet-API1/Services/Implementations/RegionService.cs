@@ -4,7 +4,7 @@ using Jet_API1.Response;
 using Jet_API1.Services.Interfaces;
 using Jet_API1.ViewModel.Cityes;
 using Jet_API1.ViewModel.Places;
-using Jet_API1.ViewModel.Region;
+using Jet_API1.ViewModel.Regions;
 
 namespace Jet_API1.Services.Implementations;
 
@@ -73,22 +73,28 @@ public class RegionService : IRegionService
 
     }
 
-    public async Task<BaseResponse<Region>> Get(int id)
+    public async Task<BaseResponse<GetRegionVM>> Get(int id)
     {
         try
         {
             var city = _db.Regions.FirstOrDefault(x => x.Id == id);
-            city.Hotel = _db.Hotels.Where(x => x.RegionId == id).ToList();
-            return new BaseResponse<Region>()
+            city.City = _db.City.FirstOrDefault(x => x.Id == city.CityId);
+            var vm = new GetRegionVM
             {
-                Data = city,
+                Name = city.Name,
+                CityId = city.CityId,
+                City = new CityVM { Name = city.City.Name},
+            };
+            return new BaseResponse<GetRegionVM>()
+            {
+                Data = vm,
                 Description = "City has been succesfully Found",
                 StatusCode = Enum.StatusCode.Ok
             };
         }
         catch (Exception ex)
         {
-            return new BaseResponse<Region>()
+            return new BaseResponse<GetRegionVM>()
             {
                 Description = ex.Message,
                 StatusCode = Enum.StatusCode.Error
@@ -96,25 +102,33 @@ public class RegionService : IRegionService
         }
     }
 
-    public BaseResponse<ICollection<Region>> GetAll()
+    public BaseResponse<ICollection<GetRegionVM>> GetAll()
     {
         try
         {
             var data = _db.Regions.Where(x => !x.IsDeleted).ToList();
+            var vms = new List<GetRegionVM>();
             foreach (var item in data)
             {
-                item.Hotel = _db.Hotels.Where(x=>x.RegionId == item.Id).ToList();
+                item.City = _db.City.FirstOrDefault(x=>x.Id == item.CityId);
+                var vm = new GetRegionVM
+                {
+                    Name = item.Name,
+                    City = new CityVM { Name = item.City.Name },
+                    CityId = item.CityId,
+                };
+                vms.Add(vm);
             }
-            return new BaseResponse<ICollection<Region>>()
+            return new BaseResponse<ICollection<GetRegionVM>>()
             {
-                Data = data,
+                Data = vms,
                 Description = "Cities have been successfully retrieved",
                 StatusCode = Enum.StatusCode.Ok
             };
         }
         catch (Exception ex)
         {
-            return new BaseResponse<ICollection<Region>>()
+            return new BaseResponse<ICollection<GetRegionVM>>()
             {
                 Description = ex.Message,
                 StatusCode = Enum.StatusCode.Error

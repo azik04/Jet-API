@@ -1,6 +1,5 @@
 ﻿using Jet_API1.Model;
 using Jet_API1.Services.Interfaces;
-using Jet_API1.ViewModel.Region;
 using Jet_API1.ViewModel.Vehicles;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +31,7 @@ public class VehicleController : ControllerBase
         }
     }
     [HttpPost]
-    public async Task<IActionResult> Create(CreateVehicleVM vehicle)
+    public async Task<IActionResult> Create(VehicleVM vehicle)
     {
         var data = await _service.Create(vehicle);
         if (data.StatusCode == Enum.StatusCode.Ok)
@@ -60,7 +59,7 @@ public class VehicleController : ControllerBase
         }
     }
     [HttpPut]
-    public async Task<IActionResult> Updata(int id, CreateVehicleVM vehicle)
+    public async Task<IActionResult> Updata(int id, VehicleVM vehicle)
     {
         var data = await _service.Update(id, vehicle);
         if (data.StatusCode == Enum.StatusCode.Ok)

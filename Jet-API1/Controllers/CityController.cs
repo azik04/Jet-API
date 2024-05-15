@@ -30,7 +30,7 @@ public class CityController : ControllerBase
         }
     }
     [HttpPost]
-    public async Task<IActionResult> Create(CreateCityVM city)
+    public async Task<IActionResult> Create(CityVM city)
     {
         var data = await _service.Create(city);
         if (data.StatusCode == Enum.StatusCode.Ok)
@@ -58,7 +58,7 @@ public class CityController : ControllerBase
         }
     }
     [HttpPut]
-    public async Task<IActionResult> Updata(int id,CreateCityVM city)
+    public async Task<IActionResult> Updata(int id,CityVM city)
     {
         var data = await _service.Update(id, city);
         if (data.StatusCode == Enum.StatusCode.Ok)

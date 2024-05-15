@@ -2,7 +2,7 @@
 using Jet_API1.Model;
 using Jet_API1.Services.Interfaces;
 using Jet_API1.ViewModel.Hotel;
-using Jet_API1.ViewModel.Region;
+using Jet_API1.ViewModel.Regions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;

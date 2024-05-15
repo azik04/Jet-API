@@ -30,7 +30,7 @@ namespace Jet_API1.Context
                     .HasForeignKey(x => x.CityId)
                     .OnDelete(DeleteBehavior.NoAction);
             });
-            modelBuilder.Entity<Hotel>(entity =>
+            modelBuilder.Entity<Hotell>(entity =>
             {
                 entity.HasKey(x => x.Id);
                 entity.HasOne(x => x.Region)
@@ -66,7 +66,7 @@ namespace Jet_API1.Context
 
         public DbSet<City> City { get; set; }
         public DbSet<Place> Places { get; set; }
-        public DbSet<Hotel> Hotels { get; set; }
+        public DbSet<Hotell> Hotels { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Region> Regions { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }

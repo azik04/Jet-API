@@ -7,10 +7,10 @@ namespace Jet_API1.Services.Interfaces
 {
     public interface IHotelService
     {
-        Task<BaseResponse<Hotel>> Create(CreateHotelVM city);
-        BaseResponse<ICollection<Hotel>> GetAll();
-        Task<BaseResponse<Hotel>> Get(int id);
-        Task<BaseResponse<Hotel>> Update(int id, CreateHotelVM city);
-        Task<BaseResponse<Hotel>> Delete(int id);
+        Task<BaseResponse<Hotell>> Create(CreateHotelVM city);
+        BaseResponse<ICollection<GetHotelVM>> GetAll();
+        Task<BaseResponse<GetHotelVM>> Get(int id);
+        Task<BaseResponse<Hotell>> Update(int id, CreateHotelVM city);
+        Task<BaseResponse<Hotell>> Delete(int id);
     }
 }

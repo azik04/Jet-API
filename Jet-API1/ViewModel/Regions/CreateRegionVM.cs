@@ -1,4 +1,4 @@
-﻿namespace Jet_API1.ViewModel.Region
+﻿namespace Jet_API1.ViewModel.Regions
 {
     public class CreateRegionVM
     {

@@ -1,9 +1,8 @@
-﻿using Jet_API1.Enum;
-using Jet_API1.Model.Base;
+﻿using Jet_API1.Model;
 
-namespace Jet_API1.Model
+namespace Jet_API1.ViewModel.Orders
 {
-    public class Order : BaseModel
+    public class GetOrderVM
     {
         public string CheckIn { get; set; }
         public string CheckOut { get; set; }
@@ -15,7 +14,6 @@ namespace Jet_API1.Model
         public int RegionId { get; set; }
         public Region Regions { get; set; }
         public int FlightId { get; set; }
-        public Flight Flight { get; set;}
-
+        public Flight Flight { get; set; }
     }
 }

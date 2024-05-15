@@ -1,6 +1,6 @@
 ﻿namespace Jet_API1.ViewModel.Cityes
 {
-    public class CreateCityVM
+    public class CityVM
     {
         public string Name { get; set; }
     }

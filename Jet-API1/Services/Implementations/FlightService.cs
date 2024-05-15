@@ -4,7 +4,6 @@ using Jet_API1.Response;
 using Jet_API1.Services.Interfaces;
 using Jet_API1.ViewModel.Cityes;
 using Jet_API1.ViewModel.Flights;
-using Jet_API1.ViewModel.Region;
 using Jet_API1.ViewModel.Vehicles;
 
 namespace Jet_API1.Services.Implementations
@@ -74,22 +73,29 @@ namespace Jet_API1.Services.Implementations
 
         }
 
-        public async Task<BaseResponse<Flight>> Get(int id)
+        public async Task<BaseResponse<GetFlightVM>> Get(int id)
         {
             try
             {
                 var flight = _db.Flights.FirstOrDefault(x => x.Id == id);
                 flight.Vehicle = _db.Vehicles.SingleOrDefault(x => x.Id == flight.VehicleId);
-                return new BaseResponse<Flight>()
+                var vm = new GetFlightVM()
                 {
-                    Data = flight,
+                    Description = flight.Description,
+                    Name = flight.Name,
+                    Vehicle = new VehicleVM { Name = flight.Vehicle.Name },
+                    VehicleId = flight.VehicleId,
+                };
+                return new BaseResponse<GetFlightVM>()
+                {
+                    Data = vm,
                     Description = "Flight has been succesfully Found",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<Flight>()
+                return new BaseResponse<GetFlightVM>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
@@ -97,25 +103,34 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public BaseResponse<ICollection<Flight>> GetAll()
+        public BaseResponse<ICollection<GetFlightVM>> GetAll()
         {
             try
             {
                 var data = _db.Flights.Where(x => !x.IsDeleted).ToList();
+                var vm = new List<GetFlightVM>();
                 foreach (var item in data)
                 {
                     item.Vehicle = _db.Vehicles.SingleOrDefault(x => x.Id == item.VehicleId);
+                    var flight = new GetFlightVM()
+                    {
+                        Description = item.Description,
+                        Name = item.Name,
+                        Vehicle = new VehicleVM { Name = item.Vehicle.Name },
+                        VehicleId = item.VehicleId,
+                    };
+                    vm.Add(flight);
                 };
-                return new BaseResponse<ICollection<Flight>>()
+                return new BaseResponse<ICollection<GetFlightVM>>()
                 {
-                    Data = data,
+                    Data = vm,
                     Description = "Flight have been successfully retrieved",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<ICollection<Flight>>()
+                return new BaseResponse<ICollection<GetFlightVM>>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error

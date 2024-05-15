@@ -14,7 +14,7 @@ namespace Jet_API1.Services.Implementations
             _db = db;
         }
 
-        public async Task<BaseResponse<City>> Create(CreateCityVM city)
+        public async Task<BaseResponse<City>> Create(CityVM city)
         {
             try
             {
@@ -70,23 +70,25 @@ namespace Jet_API1.Services.Implementations
             
         }
 
-        public async Task<BaseResponse<City>> Get(int id)
+        public async Task<BaseResponse<CityVM>> Get(int id)
         {
             try
             {
                 var city = _db.City.FirstOrDefault(x => x.Id == id);
-                city.Places = _db.Places?.Where(x => x.CityId == id).ToList();
-                city.Regions = _db.Regions?.Where(x => x.CityId == id).ToList();
-                return new BaseResponse<City>()
+                var vm = new CityVM
                 {
-                    Data = city,
+                    Name = city.Name,
+                };
+                return new BaseResponse<CityVM>()
+                {
+                    Data = vm,
                     Description = "City has been succesfully Found",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<City>()
+                return new BaseResponse<CityVM>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
@@ -94,27 +96,33 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public BaseResponse<ICollection<City>> GetAll()
+        public BaseResponse<ICollection<CityVM>> GetAll()
         {
             try
             {
                 var data = _db.City.Where(x => !x.IsDeleted).ToList();
+                var vms = new List<CityVM>();
                 foreach(var city in data)
                 {
-                   _db.Places?.Where(x => x.CityId == city.Id).ToList();
-                   _db.Regions?.Where(x => x.CityId == city.Id).ToList();
+                    //_db.Places?.Where(x => x.CityId == city.Id).ToList();
+                    //_db.Regions?.Where(x => x.CityId == city.Id).ToList();
+                    var vm = new CityVM
+                    {
+                        Name = city.Name,
+                    };
+                    vms.Add(vm);
                 }
                 
-                return new BaseResponse<ICollection<City>>()
+                return new BaseResponse<ICollection<CityVM>>()
                 {
-                    Data = data,
+                    Data = vms,
                     Description = "Cities have been successfully retrieved",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<ICollection<City>>()
+                return new BaseResponse<ICollection<CityVM>>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
@@ -122,7 +130,7 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public async Task<BaseResponse<City>> Update(int id, CreateCityVM city)
+        public async Task<BaseResponse<City>> Update(int id, CityVM city)
         {
             try
             {

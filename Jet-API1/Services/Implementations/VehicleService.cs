@@ -3,7 +3,6 @@ using Jet_API1.Model;
 using Jet_API1.Response;
 using Jet_API1.Services.Interfaces;
 using Jet_API1.ViewModel.Places;
-using Jet_API1.ViewModel.Region;
 using Jet_API1.ViewModel.Vehicles;
 
 namespace Jet_API1.Services.Implementations
@@ -16,7 +15,7 @@ namespace Jet_API1.Services.Implementations
             _db = db;
         }
 
-        public async Task<BaseResponse<Vehicle>> Create(CreateVehicleVM vehicle)
+        public async Task<BaseResponse<Vehicle>> Create(VehicleVM vehicle)
         {
             try
             {
@@ -72,21 +71,25 @@ namespace Jet_API1.Services.Implementations
 
         }
 
-        public async Task<BaseResponse<Vehicle>> Get(int id)
+        public async Task<BaseResponse<VehicleVM>> Get(int id)
         {
             try
             {
                 var vehicle = _db.Vehicles.FirstOrDefault(x => x.Id == id);
-                return new BaseResponse<Vehicle>()
+                var vm = new VehicleVM()
                 {
-                    Data = vehicle,
+                    Name = vehicle.Name
+                };
+                return new BaseResponse<VehicleVM>()
+                {
+                    Data = vm,
                     Description = "Vehicle has been succesfully Found",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<Vehicle>()
+                return new BaseResponse<VehicleVM>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
@@ -94,21 +97,30 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public BaseResponse<ICollection<Vehicle>> GetAll()
+        public BaseResponse<ICollection<VehicleVM>> GetAll()
         {
             try
             {
                 var data = _db.Vehicles.Where(x => !x.IsDeleted).ToList();
-                return new BaseResponse<ICollection<Vehicle>>()
+                var vms = new List<VehicleVM>();
+                foreach (var item in data)
                 {
-                    Data = data,
+                    var vm = new VehicleVM()
+                    {
+                        Name = item.Name,
+                    };
+                    vms.Add(vm);
+                }
+                return new BaseResponse<ICollection<VehicleVM>>()
+                {
+                    Data = vms,
                     Description = "Vehicle have been successfully retrieved",
                     StatusCode = Enum.StatusCode.Ok
                 };
             }
             catch (Exception ex)
             {
-                return new BaseResponse<ICollection<Vehicle>>()
+                return new BaseResponse<ICollection<VehicleVM>>()
                 {
                     Description = ex.Message,
                     StatusCode = Enum.StatusCode.Error
@@ -116,7 +128,7 @@ namespace Jet_API1.Services.Implementations
             }
         }
 
-        public async Task<BaseResponse<Vehicle>> Update(int id, CreateVehicleVM vehicle)
+        public async Task<BaseResponse<Vehicle>> Update(int id, VehicleVM vehicle)
         {
             try
             {

@@ -8,8 +8,8 @@ namespace Jet_API1.Services.Interfaces
     public interface IFlightService
     {
         Task<BaseResponse<Flight>> Create(CreateFlightVM flight);
-        BaseResponse<ICollection<Flight>> GetAll();
-        Task<BaseResponse<Flight>> Get(int id);
+        BaseResponse<ICollection<GetFlightVM>> GetAll();
+        Task<BaseResponse<GetFlightVM>> Get(int id);
         Task<BaseResponse<Flight>> Update(int id, CreateFlightVM city);
         Task<BaseResponse<Flight>> Delete(int id);
     }

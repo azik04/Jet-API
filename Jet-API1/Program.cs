@@ -16,7 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 var con = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
-    option.UseSqlServer(con);
+    option.UseInMemoryDatabase("Test");
 });
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
