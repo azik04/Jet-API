@@ -1,93 +1,97 @@
-﻿using Azure;
-using Jet_API1.Model;
-using Jet_API1.Services.Interfaces;
-using Jet_API1.ViewModel.Hotel;
+﻿using Jet_API1.Services.Interfaces;
 using Jet_API1.ViewModel.Regions;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
-namespace Jet_API1.Controllers
-{
-    [Route("api/[controller]")]
-    [ApiController]
-    public class RegionController : ControllerBase
-    {
-        private readonly IRegionService _service;
-        public RegionController(IRegionService service)
-        {
-            _service = service;
-        }
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var data = _service.GetAll();
-            if (data.StatusCode == Enum.StatusCode.Ok)
-            {
-                Log.Information("Tour Agency = {@data}", data);
-                return Ok(data);
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateRegionVM region)
-        {
-            var data = await _service.Create(region);
-            if (data.StatusCode == Enum.StatusCode.Ok)
-            {
+namespace Jet_API1.Controllers;
 
-                Log.Information("Tour Agency = {@data}", data);
-                return Ok(data);
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+[Route("api/[controller]")]
+[ApiController]
+public class RegionController : ControllerBase
+{
+    private readonly IRegionService _service;
+    public RegionController(IRegionService service)
+    {
+        _service = service;
+    }
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        var data = _service.GetAll();
+        if (data.StatusCode == Enum.StatusCode.Ok)
         {
-            var data = await _service.Get(id);
-            if (data.StatusCode == Enum.StatusCode.Ok)
-            {
-                Log.Information("Tour Agency = {@data}", data);
-                return Ok(data);
-            }
-            else
-            {
-                return BadRequest();
-            }
+            Log.Information("Tour Agency = {@data}", data);
+            return Ok(data);
         }
-        [HttpPut]
-        public async Task<IActionResult> Updata(int id, CreateRegionVM region)
+        else
         {
-            var data = await _service.Update(id, region);
-            if (data.StatusCode == Enum.StatusCode.Ok)
-            {
-                Log.Information("Tour Agency = {@data}", data);
-                return Ok(data);
-            }
-            else
-            {
-                return BadRequest();
-            }
+            Log.Fatal("Tour Agency = {@data}", data);
+            return BadRequest();
         }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Remove(int id)
+    }
+    [HttpPost]
+    [Authorize(Policy = "Admin")]
+    public async Task<IActionResult> Create(CreateRegionVM region)
+    {
+        var data = await _service.Create(region);
+        if (data.StatusCode == Enum.StatusCode.Ok)
         {
-            var data = await _service.Delete(id);
-            if (data.StatusCode == Enum.StatusCode.Ok)
-            {
-                Log.Information("Tour Agency = {@data}", data);
-                return Ok(data);
-            }
-            else
-            {
-                return BadRequest();
-            }
+
+            Log.Information("Tour Agency = {@data}", data);
+            return Ok(data);
+        }
+        else
+        {
+            Log.Fatal("Tour Agency = {@data}", data);
+            return BadRequest();
+        }
+    }
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var data = await _service.Get(id);
+        if (data.StatusCode == Enum.StatusCode.Ok)
+        {
+            Log.Information("Tour Agency = {@data}", data);
+            return Ok(data);
+        }
+        else
+        {
+            Log.Fatal("Tour Agency = {@data}", data);
+            return BadRequest();
+        }
+    }
+    [HttpPut]
+    [Authorize(Policy = "Admin")]
+    public async Task<IActionResult> Updata(int id, CreateRegionVM region)
+    {
+        var data = await _service.Update(id, region);
+        if (data.StatusCode == Enum.StatusCode.Ok)
+        {
+            Log.Information("Tour Agency = {@data}", data);
+            return Ok(data);
+        }
+        else
+        {
+            Log.Fatal("Tour Agency = {@data}", data);
+            return BadRequest();
+        }
+    }
+    [HttpDelete("{id}")]
+    [Authorize(Policy = "Admin")]
+    public async Task<IActionResult> Remove(int id)
+    {
+        var data = await _service.Delete(id);
+        if (data.StatusCode == Enum.StatusCode.Ok)
+        {
+            Log.Information("Tour Agency = {@data}", data);
+            return Ok(data);
+        }
+        else
+        {
+            Log.Fatal("Tour Agency = {@data}", data);
+            return BadRequest();
         }
     }
 }

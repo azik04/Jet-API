@@ -2,6 +2,7 @@
 using Jet_API1.Services.Interfaces;
 using Jet_API1.ViewModel.Flights;
 using Jet_API1.ViewModel.Hotel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -28,10 +29,12 @@ public class FlightController : ControllerBase
         }
         else
         {
+            Log.Fatal("Tour Agency = {@data}", data);
             return BadRequest();
         }
     }
     [HttpPost]
+    [Authorize(Policy = "Admin")]
     public async Task<IActionResult> Create(CreateFlightVM flight)
     {
         var data = await _service.Create(flight);
@@ -42,7 +45,7 @@ public class FlightController : ControllerBase
         }
         else
         {
-            Log.Information("Tour Agency = {@data}", data);
+            Log.Fatal("Tour Agency = {@data}", data);
             return BadRequest();
         }
     }
@@ -57,10 +60,12 @@ public class FlightController : ControllerBase
         }
         else
         {
+            Log.Fatal("Tour Agency = {@data}", data);
             return BadRequest();
         }
     }
     [HttpPut]
+    [Authorize(Policy = "Admin")]
     public async Task<IActionResult> Updata(int id, CreateFlightVM flight)
     {
         var data = await _service.Update(id, flight);
@@ -71,10 +76,12 @@ public class FlightController : ControllerBase
         }
         else
         {
+            Log.Fatal("Tour Agency = {@data}", data);
             return BadRequest();
         }
     }
     [HttpDelete("{id}")]
+    [Authorize(Policy = "Admin")]
     public async Task<IActionResult> Remove(int id)
     {
         var data = await _service.Delete(id);
@@ -85,6 +92,7 @@ public class FlightController : ControllerBase
         }
         else
         {
+            Log.Fatal("Tour Agency = {@data}", data);
             return BadRequest();
         }
     }

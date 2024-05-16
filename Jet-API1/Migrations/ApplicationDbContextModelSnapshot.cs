@@ -40,7 +40,7 @@ namespace Jet_API1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdateAt")
+                    b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -70,7 +70,7 @@ namespace Jet_API1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdateAt")
+                    b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("VehicleId")
@@ -83,7 +83,7 @@ namespace Jet_API1.Migrations
                     b.ToTable("Flights");
                 });
 
-            modelBuilder.Entity("Jet_API1.Model.Hotel", b =>
+            modelBuilder.Entity("Jet_API1.Model.Hotell", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -104,7 +104,7 @@ namespace Jet_API1.Migrations
                     b.Property<int>("RegionId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdateAt")
+                    b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -145,7 +145,7 @@ namespace Jet_API1.Migrations
                     b.Property<int>("RegionId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdateAt")
+                    b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
@@ -193,7 +193,7 @@ namespace Jet_API1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdateAt")
+                    b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -224,7 +224,7 @@ namespace Jet_API1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdateAt")
+                    b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -252,7 +252,7 @@ namespace Jet_API1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdateAt")
+                    b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -284,7 +284,10 @@ namespace Jet_API1.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("AspNetRoles", null, t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -469,7 +472,7 @@ namespace Jet_API1.Migrations
                     b.Navigation("Vehicle");
                 });
 
-            modelBuilder.Entity("Jet_API1.Model.Hotel", b =>
+            modelBuilder.Entity("Jet_API1.Model.Hotell", b =>
                 {
                     b.HasOne("Jet_API1.Model.Region", "Region")
                         .WithMany("Hotel")
@@ -488,7 +491,7 @@ namespace Jet_API1.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Jet_API1.Model.Hotel", "Hotels")
+                    b.HasOne("Jet_API1.Model.Hotell", "Hotels")
                         .WithMany("Order")
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -501,9 +504,9 @@ namespace Jet_API1.Migrations
                         .IsRequired();
 
                     b.HasOne("Jet_API1.Model.Vehicle", "Vehicle")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Flight");
@@ -600,7 +603,7 @@ namespace Jet_API1.Migrations
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("Jet_API1.Model.Hotel", b =>
+            modelBuilder.Entity("Jet_API1.Model.Hotell", b =>
                 {
                     b.Navigation("Order");
                 });
@@ -615,6 +618,8 @@ namespace Jet_API1.Migrations
             modelBuilder.Entity("Jet_API1.Model.Vehicle", b =>
                 {
                     b.Navigation("Flights");
+
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

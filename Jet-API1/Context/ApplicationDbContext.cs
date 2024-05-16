@@ -52,6 +52,7 @@ namespace Jet_API1.Context
                 entity.HasOne(x => x.Hotels).WithMany(x => x.Order).HasForeignKey(x => x.HotelId).OnDelete(DeleteBehavior.NoAction);
                 entity.HasOne(x => x.Regions).WithMany(x => x.Order).HasForeignKey(x => x.RegionId).OnDelete(DeleteBehavior.NoAction);
                 entity.HasOne(x=>x.Flight).WithMany(x =>x.Orders).HasForeignKey(x=>x.FlightId).OnDelete(DeleteBehavior.NoAction);
+                entity.HasOne(x => x.Vehicle).WithMany(x => x.Orders).HasForeignKey(x => x.VehicleId).OnDelete(DeleteBehavior.NoAction);
             });
             modelBuilder.Entity<Vehicle>(entity =>
             {
@@ -62,6 +63,7 @@ namespace Jet_API1.Context
                 entity.HasKey(x => x.Id);
                 entity.HasOne(x => x.Vehicle).WithMany(x => x.Flights).HasForeignKey(x => x.VehicleId).OnDelete(DeleteBehavior.NoAction);
             });
+            modelBuilder.Entity<IdentityRole>().ToTable("AspNetRoles", t => t.ExcludeFromMigrations());
         }
 
         public DbSet<City> City { get; set; }

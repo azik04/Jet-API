@@ -1,6 +1,7 @@
 ﻿using Jet_API1.Model;
 using Jet_API1.Services.Interfaces;
-using Jet_API1.ViewModel.Cityes; 
+using Jet_API1.ViewModel.Cityes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -26,10 +27,13 @@ public class CityController : ControllerBase
         }
         else
         {
+            Log.Fatal("Tour Agency = {@data}", data);
             return BadRequest();
         }
     }
+
     [HttpPost]
+    [Authorize(Policy = "Admin")]
     public async Task<IActionResult> Create(CityVM city)
     {
         var data = await _service.Create(city);
@@ -40,9 +44,11 @@ public class CityController : ControllerBase
         }
         else
         {
+            Log.Fatal("Tour Agency = {@data}", data);
             return BadRequest();
         }
     }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -54,10 +60,13 @@ public class CityController : ControllerBase
         }
         else
         {
+            Log.Fatal("Tour Agency = {@data}", data);
             return BadRequest();
         }
     }
+
     [HttpPut]
+    [Authorize(Policy = "Admin")]
     public async Task<IActionResult> Updata(int id,CityVM city)
     {
         var data = await _service.Update(id, city);
@@ -68,10 +77,13 @@ public class CityController : ControllerBase
         }
         else
         {
+            Log.Fatal("Tour Agency = {@data}", data);
             return BadRequest();
         }
     }
+
     [HttpDelete("{id}")]
+    [Authorize(Policy = "Admin")]
     public async Task<IActionResult> Remove(int id)
     {
         var data = await _service.Delete(id);
@@ -82,6 +94,7 @@ public class CityController : ControllerBase
         }
         else
         {
+            Log.Fatal("Tour Agency = {@data}", data);
             return BadRequest();
         }
     }

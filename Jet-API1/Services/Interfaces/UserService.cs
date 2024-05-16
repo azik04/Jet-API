@@ -1,7 +1,10 @@
-﻿using Jet_API1.Response;
+﻿using Jet_API1.Helpers;
+using Jet_API1.Response;
 using Jet_API1.ViewModel.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Jet_API1.Services.Interfaces
 {
@@ -10,11 +13,13 @@ namespace Jet_API1.Services.Interfaces
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public UserService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager)
+        private readonly JwtHelper _jwtHelper;
+        public UserService(UserManager<IdentityUser> userManager, JwtHelper jwtHelper, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _jwtHelper = jwtHelper;
         }
 
         public async Task<BaseResponse<IdentityUser>> CreateRole()
@@ -130,9 +135,27 @@ namespace Jet_API1.Services.Interfaces
                 var result = await _signInManager.PasswordSignInAsync(user, account.Password, isPersistent: false, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var roles = await _userManager.GetRolesAsync(user);
+
+                    var authClaims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, user.UserName),
+                    };
+
+                    foreach (var role in roles)
+                    {
+                        authClaims.Add(new Claim(ClaimTypes.Role, role));
+                    }
+
+                    authClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+
+                    var token = _jwtHelper.GetToken(authClaims);
+                    var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
                     return new BaseResponse<IdentityUser>
                     {
-                        Description = "LogIn Succesed",
+                        Data = user,
+                        Description = tokenString,
                         StatusCode = Enum.StatusCode.Ok
                     };
                 }
