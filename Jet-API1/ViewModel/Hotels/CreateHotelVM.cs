@@ -1,8 +1,11 @@
-﻿namespace Jet_API1.ViewModel.Hotel
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Jet_API1.ViewModel.Hotel;
+
+public class CreateHotelVM
 {
-    public class CreateHotelVM
-    {
-        public string Name { get; set; }
-        public int RegionId { get; set; }
-    }
+    [Required]
+    public string Name { get; set; }
+    [Required]
+    public int RegionId { get; set; }
 }

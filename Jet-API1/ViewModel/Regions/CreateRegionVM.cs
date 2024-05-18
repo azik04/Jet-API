@@ -1,8 +1,11 @@
-﻿namespace Jet_API1.ViewModel.Regions
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Jet_API1.ViewModel.Regions;
+
+public class CreateRegionVM
 {
-    public class CreateRegionVM
-    {
-        public string Name { get; set; }
-        public int CityId { get; set; }
-    }
+    [Required]
+    public string Name { get; set; }
+    [Required]
+    public int CityId { get; set; }
 }

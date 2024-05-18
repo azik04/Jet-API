@@ -3,7 +3,6 @@ using Jet_API1.Model;
 using Jet_API1.Response;
 using Jet_API1.Services.Interfaces;
 using Jet_API1.ViewModel.Cityes;
-using Jet_API1.ViewModel.Places;
 using Jet_API1.ViewModel.Regions;
 
 namespace Jet_API1.Services.Implementations;

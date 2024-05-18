@@ -1,37 +1,35 @@
-﻿
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Jet_API1.Helpers
+namespace Jet_API1.Helpers;
+
+public class JwtHelper
 {
-    public class JwtHelper
+    private readonly IConfiguration _configuration;
+    private readonly string _secureKey;
+
+    public JwtHelper(IConfiguration configuration)
     {
-        private readonly IConfiguration _configuration;
-        public JwtHelper ( IConfiguration configuration)
+        _configuration = configuration;
+        _secureKey = _configuration["JWT:SecretKey"];
+
+        if (string.IsNullOrEmpty(_secureKey))
         {
-            _configuration = configuration;
+            throw new InvalidOperationException("JWT secret key is missing or empty.");
         }
-        private string secureKey = "BEEABD3A-78C9-4E55-813D-642D25944B8F";
-        public JwtSecurityToken GetToken(List<Claim> authClaims)
-        {
-            if (string.IsNullOrEmpty(secureKey))
-            {
-                throw new InvalidOperationException("JWT secret is missing or empty.");
-            }
+    }
 
-
-
-            var authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secureKey));
-            var token = new JwtSecurityToken(
-                issuer: _configuration["JWT:ValidIssuer"],
-                audience: _configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddHours(3),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authSigninKey, SecurityAlgorithms.HmacSha256)
-                );
-            return token;
-        }
+    public JwtSecurityToken GetToken(List<Claim> authClaims)
+    {
+        var authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secureKey));
+        var token = new JwtSecurityToken(
+            issuer: _configuration["JWT:ValidIssuer"],
+            expires: DateTime.Now.AddHours(3),
+            claims: authClaims,
+            signingCredentials: new SigningCredentials(authSigninKey, SecurityAlgorithms.HmacSha256)
+        );
+        return token;
     }
 }

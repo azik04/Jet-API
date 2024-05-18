@@ -1,5 +1,4 @@
-﻿using Jet_API1.Model;
-using Jet_API1.Services.Interfaces;
+﻿using Jet_API1.Services.Interfaces;
 using Jet_API1.ViewModel.Cityes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +32,7 @@ public class CityController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Create(CityVM city)
     {
         var data = await _service.Create(city);
@@ -66,7 +65,7 @@ public class CityController : ControllerBase
     }
 
     [HttpPut]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Updata(int id,CityVM city)
     {
         var data = await _service.Update(id, city);
@@ -83,7 +82,7 @@ public class CityController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Remove(int id)
     {
         var data = await _service.Delete(id);

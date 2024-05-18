@@ -1,8 +1,7 @@
-﻿namespace Jet_API1.ViewModel.Hotel
-{
-    public class HotelVM
-    {
+﻿namespace Jet_API1.ViewModel.Hotel;
 
-        public string Name { get; set; }
-    }
+public class HotelVM
+{
+
+    public string Name { get; set; }
 }

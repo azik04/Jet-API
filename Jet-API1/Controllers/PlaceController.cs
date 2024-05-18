@@ -1,11 +1,8 @@
-﻿using Jet_API1.Model;
-using Jet_API1.Services.Interfaces;
+﻿using Jet_API1.Services.Interfaces;
 using Jet_API1.ViewModel.Places;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Jet_API1.Controllers;
 
@@ -49,7 +46,7 @@ public class PlaceController : ControllerBase
         }
     }
     [HttpPut]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Update(int id, CreatePalaceVM place)
     {
         var response = await _service.Update(id, place);
@@ -66,7 +63,7 @@ public class PlaceController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Create(CreatePalaceVM place)
     {
         var response = await _service.Create(place);
@@ -83,7 +80,7 @@ public class PlaceController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Remove(int id)
     {
         var response = await _service.Delete(id);

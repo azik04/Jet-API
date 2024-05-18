@@ -1,9 +1,6 @@
-﻿using Jet_API1.Model;
-using Jet_API1.Services.Interfaces;
-using Jet_API1.ViewModel.Cityes;
+﻿using Jet_API1.Services.Interfaces;
 using Jet_API1.ViewModel.Hotel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -33,7 +30,7 @@ public class HotelController : ControllerBase
         }
     }
     [HttpPost]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Create(CreateHotelVM hotel)
     {
         var data = await _service.Create(hotel);
@@ -64,7 +61,7 @@ public class HotelController : ControllerBase
         }
     }
     [HttpPut]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Updata(int id, CreateHotelVM hotel)
     {
         var data = await _service.Update(id, hotel);
@@ -80,7 +77,7 @@ public class HotelController : ControllerBase
         }
     }
     [HttpDelete("{id}")]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Remove(int id)
     {
         var data = await _service.Delete(id);

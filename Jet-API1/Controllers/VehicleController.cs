@@ -31,7 +31,7 @@ public class VehicleController : ControllerBase
         }
     }
     [HttpPost]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Create(VehicleVM vehicle)
     {
         var data = await _service.Create(vehicle);
@@ -62,7 +62,7 @@ public class VehicleController : ControllerBase
         }
     }
     [HttpPut]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Updata(int id, VehicleVM vehicle)
     {
         var data = await _service.Update(id, vehicle);
@@ -78,7 +78,7 @@ public class VehicleController : ControllerBase
         }
     }
     [HttpDelete("{id}")]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Remove(int id)
     {
         var data = await _service.Delete(id);

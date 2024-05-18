@@ -1,13 +1,21 @@
-﻿namespace Jet_API1.ViewModel.Orders
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Jet_API1.ViewModel.Orders;
+
+public class CreateOrderVM
 {
-    public class CreateOrderVM
-    {
-        public string CheckIn { get; set; }
-        public string CheckOut { get; set; }
-        public string UserName { get; set; }
-        public int HotelId { get; set; }
-        public int FlightId { get; set; }
-        public int VehicleId { get; set; }
-        public int RegionId { get; set; }
-    }
+    [Required]
+    public string CheckIn { get; set; }
+    [Required]
+    public string CheckOut { get; set; }
+    [Required]
+    public string UserName { get; set; }
+    [Required]
+    public int HotelId { get; set; }
+    [Required]
+    public int FlightId { get; set; }
+    [Required]
+    public int VehicleId { get; set; }
+    [Required]
+    public int RegionId { get; set; }
 }

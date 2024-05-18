@@ -1,9 +1,6 @@
-﻿using Jet_API1.Model;
-using Jet_API1.Services.Interfaces;
+﻿using Jet_API1.Services.Interfaces;
 using Jet_API1.ViewModel.Flights;
-using Jet_API1.ViewModel.Hotel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -34,7 +31,7 @@ public class FlightController : ControllerBase
         }
     }
     [HttpPost]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Create(CreateFlightVM flight)
     {
         var data = await _service.Create(flight);
@@ -65,7 +62,7 @@ public class FlightController : ControllerBase
         }
     }
     [HttpPut]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Updata(int id, CreateFlightVM flight)
     {
         var data = await _service.Update(id, flight);
@@ -81,7 +78,7 @@ public class FlightController : ControllerBase
         }
     }
     [HttpDelete("{id}")]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Remove(int id)
     {
         var data = await _service.Delete(id);

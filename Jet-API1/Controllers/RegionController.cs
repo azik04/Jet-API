@@ -31,7 +31,7 @@ public class RegionController : ControllerBase
         }
     }
     [HttpPost]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Create(CreateRegionVM region)
     {
         var data = await _service.Create(region);
@@ -63,7 +63,7 @@ public class RegionController : ControllerBase
         }
     }
     [HttpPut]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Updata(int id, CreateRegionVM region)
     {
         var data = await _service.Update(id, region);
@@ -79,7 +79,7 @@ public class RegionController : ControllerBase
         }
     }
     [HttpDelete("{id}")]
-    [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "AdminOrSuperAdmin")]
     public async Task<IActionResult> Remove(int id)
     {
         var data = await _service.Delete(id);

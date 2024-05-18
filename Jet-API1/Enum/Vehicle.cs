@@ -1,9 +1,8 @@
-﻿namespace Jet_API1.Enum
+﻿namespace Jet_API1.Enum;
+
+public enum Vehicle
 {
-    public enum Vehicle
-    {
-        Bus,
-        Train,
-        Plane
-    }
+    Bus,
+    Train,
+    Plane
 }
